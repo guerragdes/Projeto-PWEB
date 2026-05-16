@@ -4,48 +4,66 @@
 
 <body>
 <main>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px">
-        <h1>Carrinho de Compras</h1>
-        <a href="/produtos/loja" class="btn btn-outline-primary">Continuar Comprando</a>
+    <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+        <h1 class="mb-0">🛒 Carrinho de Compras</h1>
+        <a href="/produtos/loja" class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">
+            ← Continuar Comprando
+        </a>
     </div>
 
     <!-- Mensagem de carrinho vazio -->
-    <div th:if="${itens.isEmpty()}" class="empty-message" style="text-align: center; padding: 60px; background-color: #f9f9f9; border-radius: 8px;">
-        <p style="font-size: 20px; color: #999; margin-bottom: 20px;">Seu carrinho está vazio</p>
-        <a href="/produtos/loja" class="btn btn-primary btn-lg">Começar a Comprar</a>
+    <div th:if="${itens.isEmpty()}" class="empty-message text-center py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; border: 2px dashed #e0e0e0;">
+        <p style="font-size: 20px; color: #667; margin-bottom: 1.5rem;">Seu carrinho está vazio</p>
+        <p style="color: #999; margin-bottom: 2rem;">Adicione alguns produtos para começar sua compra</p>
+        <a href="/produtos/loja" class="btn btn-primary btn-lg" style="border-radius: 8px; padding: 0.8rem 2rem; font-weight: 500;">
+            Começar a Comprar
+        </a>
     </div>
 
     <div th:unless="${itens.isEmpty()}">
         <div class="table-responsive mb-4">
-            <table class="table table-hover table-striped">
-                <thead class="table-light">
+            <table class="table" style="border-collapse: collapse;">
+                <thead style="background-color: #f5f7fa; border-bottom: 2px solid #e0e0e0;">
                     <tr>
-                        <th>Produto</th>
-                        <th class="text-center">Valor Unitário</th>
-                        <th class="text-center">Quantidade</th>
-                        <th class="text-center">Subtotal</th>
-                        <th class="text-center">Ações</th>
+                        <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Produto</th>
+                        <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Valor Unitário</th>
+                        <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Quantidade</th>
+                        <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Subtotal</th>
+                        <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="item : ${itens}">
-                        <td th:text="${item.produto.descricao}">Produto</td>
-                        <td class="text-center">
-                            <strong th:text="|R$ ${#numbers.formatDecimal(item.produto.valor, 1, 2)}|">R$ 0,00</strong>
+                    <tr th:each="item : ${itens}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
+                        <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${item.produto.descricao}">Produto</td>
+                        <td class="text-center p-3">
+                            <strong style="color: #0066cc; font-size: 16px;" th:text="|R$ ${#numbers.formatDecimal(item.produto.valor, 1, 2)}|">R$ 0,00</strong>
                         </td>
-                        <td class="text-center">
-                            <form th:action="@{/carrinho/atualizar-quantidade}" method="post" style="display: flex; justify-content: center; gap: 5px;">
+                        <td class="text-center p-3">
+                            <form th:action="@{/carrinho/atualizar-quantidade}" method="post" class="d-flex justify-content-center align-items-center gap-0" style="display: flex !important;">
                                 <input type="hidden" name="produtoId" th:value="${item.produto.id}">
-                                <input type="number" name="quantidade" th:value="${item.quantidade}" min="1" step="1" style="width: 60px; padding: 5px; text-align: center;" required>
-                                <button type="submit" class="btn btn-sm btn-outline-secondary">↻</button>
+                                
+                                <button type="button" class="btn btn-outline-secondary btn-sm" style="border-radius: 4px 0 0 4px; border: 1px solid #ccc; padding: 0.4rem 0.7rem; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 600; transition: all 0.2s ease;" 
+                                        onclick="decrementQuantity(this)">
+                                    −
+                                </button>
+                                
+                                <input type="number" name="quantidade" th:value="${#numbers.formatInteger(item.quantidade, 0)}" 
+                                       min="1" step="1" style="width: 50px; padding: 0.4rem; text-align: center; border: 1px solid #ccc; border-left: none; border-right: none; height: 36px; font-weight: 600; font-size: 14px; -moz-appearance: textfield;">
+                                
+                                <button type="button" class="btn btn-outline-secondary btn-sm" style="border-radius: 0 4px 4px 0; border: 1px solid #ccc; padding: 0.4rem 0.7rem; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-weight: 600; transition: all 0.2s ease;" 
+                                        onclick="incrementQuantity(this)">
+                                    +
+                                </button>
                             </form>
                         </td>
-                        <td class="text-center">
-                            <strong th:text="|R$ ${#numbers.formatDecimal(item.total(), 1, 2)}|" style="color: #28a745;">R$ 0,00</strong>
+                        <td class="text-center p-3">
+                            <strong style="color: #10b981; font-size: 16px;" th:text="|R$ ${#numbers.formatDecimal(item.total(), 1, 2)}|">R$ 0,00</strong>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center p-3">
                             <form th:action="@{/carrinho/remover/{id}(id=${item.produto.id})}" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">🗑️ Remover</button>
+                                <button type="submit" class="btn btn-sm btn-danger" style="border-radius: 6px; padding: 0.4rem 0.8rem; font-weight: 500; transition: all 0.2s ease;">
+                                    🗑️ Remover
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -54,14 +72,14 @@
         </div>
 
         <!-- Resumo e Seleção de Cliente -->
-        <div class="row">
-            <div class="col-md-8">
-                <div class="card border-light shadow-sm p-4" style="background-color: #f8f9fa;">
-                    <h5>Selecione um Cliente</h5>
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="card border-0 shadow-sm p-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px;">
+                    <h5 class="mb-4" style="color: #1a1a1a; font-weight: 600;">Selecione um Cliente para Finalizar</h5>
                     <form th:action="@{/carrinho/finalizar}" method="post">
-                        <div class="mb-3">
-                            <label for="clienteId" class="form-label">Cliente</label>
-                            <select id="clienteId" name="clienteId" class="form-select">
+                        <div class="mb-4">
+                            <label for="clienteId" class="form-label" style="color: #1a1a1a; font-weight: 500;">Cliente *</label>
+                            <select id="clienteId" name="clienteId" class="form-select" style="border-radius: 8px; border: 1px solid #e0e0e0; padding: 0.7rem; background-color: white;">
                                 <option value="">-- Selecione um Cliente --</option>
                                 <option th:each="cliente : ${clientes}"
                                         th:value="${cliente.id}"
@@ -69,12 +87,16 @@
                                     Cliente
                                 </option>
                             </select>
-                            <div class="text-danger" th:if="${erroKey}" th:text="#{${erroKey}}"></div>
+                            <div class="text-danger mt-2" th:if="${erroKey}" th:text="#{${erroKey}}" style="font-weight: 500;"></div>
                         </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-success btn-lg">Finalizar Compra</button>
-                            <form th:action="@{/carrinho/limpar}" method="post" style="display: inline;">
-                                <button type="submit" class="btn btn-outline-danger">Limpar Carrinho</button>
+                        <div class="d-flex gap-3 flex-wrap">
+                            <button type="submit" class="btn btn-success btn-lg" style="border-radius: 8px; padding: 0.8rem 2rem; font-weight: 500; transition: all 0.2s ease; flex: 1; min-width: 200px;">
+                                ✓ Finalizar Compra
+                            </button>
+                            <form th:action="@{/carrinho/limpar}" method="post" style="display: inline; flex: 1; min-width: 200px;">
+                                <button type="submit" class="btn btn-outline-danger w-100" style="border-radius: 8px; padding: 0.8rem 2rem; font-weight: 500; transition: all 0.2s ease;">
+                                    ✕ Limpar Carrinho
+                                </button>
                             </form>
                         </div>
                     </form>
@@ -82,21 +104,21 @@
             </div>
 
             <!-- Resumo do Total -->
-            <div class="col-md-4">
-                <div class="card border-success shadow-sm" style="background-color: #e8f5e9;">
-                    <div class="card-body">
-                        <h5 class="card-title">Resumo da Compra</h5>
-                        <hr>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span>Subtotal:</span>
-                            <strong th:text="|R$ ${#numbers.formatDecimal(total, 1, 2)}|">R$ 0,00</strong>
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f6 100%); border-radius: 12px; border-left: 4px solid #10b981;">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4" style="color: #1a1a1a; font-weight: 600;">Resumo da Compra</h5>
+                        <hr style="border-color: #d4edda;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #555;">
+                            <span style="font-weight: 500;">Subtotal:</span>
+                            <strong th:text="|R$ ${#numbers.formatDecimal(total, 1, 2)}|" style="color: #1a1a1a;">R$ 0,00</strong>
                         </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span>Frete:</span>
-                            <strong>R$ 0,00</strong>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #555;">
+                            <span style="font-weight: 500;">Frete:</span>
+                            <strong style="color: #1a1a1a;">R$ 0,00</strong>
                         </div>
-                        <hr>
-                        <div style="display: flex; justify-content: space-between; font-size: 18px; font-weight: bold; color: #28a745;">
+                        <hr style="border-color: #d4edda;">
+                        <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 700; color: #10b981;">
                             <span>TOTAL:</span>
                             <span th:text="|R$ ${#numbers.formatDecimal(total, 1, 2)}|">R$ 0,00</span>
                         </div>
@@ -105,6 +127,110 @@
             </div>
         </div>
     </div>
+
+    <style>
+        body {
+            background-color: #fafbfc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .btn-success {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
+        }
+
+        .btn-success:hover {
+            background-color: #059669 !important;
+            border-color: #059669 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
+        }
+
+        .btn-primary {
+            background-color: #0066cc !important;
+            border-color: #0066cc !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3 !important;
+            border-color: #0052a3 !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: #ef4444 !important;
+            border-color: #ef4444 !important;
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626 !important;
+            border-color: #dc2626 !important;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #f0f0f0 !important;
+            color: #333 !important;
+            border-color: #999 !important;
+        }
+
+        .form-select {
+            transition: all 0.2s ease;
+        }
+
+        .form-select:focus {
+            border-color: #0066cc !important;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa !important;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            .btn-lg {
+                padding: 0.6rem 1rem !important;
+                font-size: 0.9rem !important;
+            }
+
+            td, th {
+                padding: 0.75rem 0.5rem !important;
+            }
+        }
+    </style>
+
+    <script>
+        function incrementQuantity(btn) {
+            const form = btn.closest('form');
+            const input = form.querySelector('input[name="quantidade"]');
+            let currentValue = parseInt(input.value) || 1;
+            input.value = currentValue + 1;
+            form.submit();
+        }
+
+        function decrementQuantity(btn) {
+            const form = btn.closest('form');
+            const input = form.querySelector('input[name="quantidade"]');
+            let currentValue = parseInt(input.value) || 1;
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                form.submit();
+            }
+        }
+    </script>
 </main>
 </body>
 </html>

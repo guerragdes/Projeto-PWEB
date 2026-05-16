@@ -4,50 +4,106 @@
 
 <body>
 <main>
-    <h1>Empresas</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="mb-0">🏢 Empresas</h1>
+        <a href="/empresa/novo" class="btn btn-primary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">+ Nova Empresa</a>
+    </div>
 
-    <a href="/empresa/novo" class="btn btn-primary mb-3">+ Nova Empresa</a>
-
-    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
-        <h3>Filtrar Empresas</h3>
-        <form method="get" action="/empresa" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-
-            <div style="flex: 1; min-width: 200px;">
-                <label for="razaoSocial">Razão Social:</label>
-                <input type="text" id="razaoSocial" name="razaoSocial" th:value="${razaoSocial}" placeholder="Buscar por razão social..." style="width: 100%; padding: 5px;">
+    <div class="filter-form p-4 mb-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <h5 class="mb-3" style="color: #1a1a1a; font-weight: 600;">Filtrar Empresas</h5>
+        <form method="get" action="/empresa" class="d-flex flex-wrap gap-3 align-items-end">
+            <div style="flex: 1; min-width: 250px;">
+                <label for="razaoSocial" class="form-label fw-500">Razão Social:</label>
+                <input type="text" id="razaoSocial" name="razaoSocial" th:value="${razaoSocial}" 
+                       placeholder="Buscar por razão social..." 
+                       class="form-control" 
+                       style="border-radius: 8px; border: 1px solid #e0e0e0; padding: 0.7rem;">
             </div>
-
-            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
-            <a href="/empresa" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">🔍 Filtrar</button>
+                <a href="/empresa" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">↻ Limpar</a>
+            </div>
         </form>
     </div>
 
-    <div th:if="${listaEmpresas.isEmpty()}" class="empty-message">
-        <p>Nenhuma empresa cadastrada.</p>
+    <div th:if="${listaEmpresas.isEmpty()}" class="empty-message text-center py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; border: 2px dashed #e0e0e0;">
+        <p style="font-size: 18px; color: #667; margin: 0;">Nenhuma empresa cadastrada.</p>
     </div>
 
-    <table class="table table-striped" th:unless="${listaEmpresas.isEmpty()}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>CNPJ</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="empresa : ${listaEmpresas}">
-            <td th:text="${empresa.id}"></td>
-            <td th:text="${empresa.razaoSocial}"></td>
-            <td th:text="${empresa.cnpj}"></td>
-            <td th:text="${empresa.email}"></td>
-            <td th:text="${empresa.telefone}"></td>
-            <td>
-                <a th:href="@{/vendas/empresa/{id}(id=${empresa.id})}" class="btn btn-sm btn-info">Compras</a>
-            </td>
-        </tr>
+    <div class="table-responsive" th:unless="${listaEmpresas.isEmpty()}">
+        <table class="table" style="border-collapse: collapse;">
+            <thead style="background-color: #f5f7fa; border-bottom: 2px solid #e0e0e0;">
+                <tr>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">ID</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Nome</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">CNPJ</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Email</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Telefone</th>
+                    <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="empresa : ${listaEmpresas}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
+                    <td class="p-3" style="color: #667;">#<span th:text="${empresa.id}"></span></td>
+                    <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${empresa.razaoSocial}"></td>
+                    <td class="p-3" style="color: #667;" th:text="${empresa.cnpj}"></td>
+                    <td class="p-3" style="color: #667;" th:text="${empresa.email}"></td>
+                    <td class="p-3" style="color: #667;" th:text="${empresa.telefone}"></td>
+                    <td class="text-center p-3">
+                        <a th:href="@{/vendas/empresa/{id}(id=${empresa.id})}" class="btn btn-sm" style="background-color: #0066cc; color: white; border-radius: 6px; padding: 0.4rem 0.8rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease;">🛍️ Compras</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        body {
+            background-color: #fafbfc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .btn-primary {
+            background-color: #0066cc !important;
+            border-color: #0066cc !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3 !important;
+            border-color: #0052a3 !important;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #0066cc !important;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa !important;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            td, th {
+                padding: 0.75rem 0.5rem !important;
+            }
+        }
+    </style>
+</main>
+</body>
+</html>
         </tbody>
     </table>
 </main>

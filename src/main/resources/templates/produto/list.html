@@ -4,44 +4,97 @@
 
 <body>
 <main>
-    <h1>Produtos</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <h1 class="mb-0">📦 Produtos</h1>
+        <a href="/produtos/novo" class="btn btn-primary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">+ Novo Produto</a>
+    </div>
 
-    <a href="/produtos/novo" class="btn btn-primary mb-3">+ Novo Produto</a>
-
-    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
-        <h3>Filtrar Produtos</h3>
-        <form method="get" action="/produtos" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-
-            <div style="flex: 1; min-width: 200px;">
-                <label for="descricao">Nome:</label>
-                <input type="text" id="descricao" name="descricao" th:value="${descricao}" placeholder="Buscar por nome..." style="width: 100%; padding: 5px;">
+    <div class="filter-form p-4 mb-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <h5 class="mb-3" style="color: #1a1a1a; font-weight: 600;">Filtrar Produtos</h5>
+        <form method="get" action="/produtos" class="d-flex flex-wrap gap-3 align-items-end">
+            <div style="flex: 1; min-width: 250px;">
+                <label for="descricao" class="form-label fw-500">Nome:</label>
+                <input type="text" id="descricao" name="descricao" th:value="${descricao}" 
+                       placeholder="Buscar por nome..." 
+                       class="form-control" 
+                       style="border-radius: 8px; border: 1px solid #e0e0e0; padding: 0.7rem;">
             </div>
-
-            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
-            <a href="/produtos" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">🔍 Filtrar</button>
+                <a href="/produtos" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">↻ Limpar</a>
+            </div>
         </form>
     </div>
 
-    <div th:if="${listaProdutos.isEmpty()}" class="empty-message">
-        <p>Nenhum produto cadastrado.</p>
+    <div th:if="${listaProdutos.isEmpty()}" class="empty-message text-center py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; border: 2px dashed #e0e0e0;">
+        <p style="font-size: 18px; color: #667; margin: 0;">Nenhum produto cadastrado.</p>
     </div>
 
-    <table class="table table-striped" th:unless="${listaProdutos.isEmpty()}">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="produto : ${listaProdutos}">
-            <td th:text="${produto.id}"></td>
-            <td th:text="${produto.descricao}"></td>
-            <td th:text="|R$ ${#numbers.formatDecimal(produto.valor, 1, 2)}|"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-responsive" th:unless="${listaProdutos.isEmpty()}">
+        <table class="table" style="border-collapse: collapse;">
+            <thead style="background-color: #f5f7fa; border-bottom: 2px solid #e0e0e0;">
+                <tr>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">ID</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Descrição</th>
+                    <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="produto : ${listaProdutos}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
+                    <td class="p-3" style="color: #667;">#<span th:text="${produto.id}"></span></td>
+                    <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${produto.descricao}"></td>
+                    <td class="text-center p-3">
+                        <strong style="color: #0066cc; font-size: 16px;" th:text="|R$ ${#numbers.formatDecimal(produto.valor, 1, 2)}|"></strong>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <style>
+        body {
+            background-color: #fafbfc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .btn-primary {
+            background-color: #0066cc !important;
+            border-color: #0066cc !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3 !important;
+            border-color: #0052a3 !important;
+            transform: translateY(-2px);
+        }
+
+        .form-control {
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: #0066cc !important;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f7fa !important;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .table {
+                font-size: 0.9rem;
+            }
+
+            td, th {
+                padding: 0.75rem 0.5rem !important;
+            }
+        }
+    </style>
 </main>
 </body>
 </html>

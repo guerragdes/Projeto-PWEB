@@ -81,4 +81,10 @@ public class CarrinhoService implements Serializable {
     public boolean estaVazio() {
         return itens.isEmpty();
     }
+
+    public int obterQuantidadeTotalItens() {
+        return (int) itens.stream()
+                .mapToDouble(Item::getQuantidade)
+                .sum();
+    }
 }

@@ -5,11 +5,13 @@
 
     <head th:replace="${head}"></head>
 
-    <body class="container d-flex flex-column min-vh-100">
+    <body class="d-flex flex-column min-vh-100" style="background-color: #fafbfc;">
 
-        <header th:replace="~{fragments/header :: header}"></header>
+        <header th:replace="~{fragments/header :: header}" class="sticky-top" style="z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.08);"></header>
 
-        <main  th:replace="${main}"></main>
+        <div style="flex-grow: 1; width: 100%; padding: 0; display: flex; justify-content: center;">
+            <main th:replace="${main}" style="max-width: 1200px; width: 100%; padding: 2rem 2.5rem; overflow-x: hidden;"></main>
+        </div>
 
         <footer th:replace="~{fragments/footer :: footer}"></footer>
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.projetopweb.model.entity.Produto;
 import com.example.projetopweb.model.repository.ProdutoRepository;
+import com.example.projetopweb.service.CarrinhoService;
 
 import jakarta.validation.Valid;
 
@@ -23,6 +24,9 @@ public class ProdutoController {
 
     @Autowired
     ProdutoRepository produtoRepository;
+
+    @Autowired
+    CarrinhoService carrinhoService;
 
     @GetMapping
     public String listar(
@@ -57,6 +61,7 @@ public class ProdutoController {
         }
 
         model.addAttribute("listaProdutos", listaProdutos);
+        model.addAttribute("quantidadeCarrinho", carrinhoService.obterQuantidadeTotalItens());
         return "produto/loja";
     }
 
