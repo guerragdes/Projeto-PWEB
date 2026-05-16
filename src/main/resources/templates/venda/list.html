@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <main>
+            <h1>Lista de Vendas</h1>
+
+        <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+            <h3>Filtrar Vendas</h3>
+            <form method="get" action="/vendas" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="dataInicio">Data Início:</label>
+                    <input type="date" id="dataInicio" name="dataInicio" th:value="${dataInicio}" style="width: 100%; padding: 5px;">
+                </div>
+
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="dataFim">Data Fim:</label>
+                    <input type="date" id="dataFim" name="dataFim" th:value="${dataFim}" style="width: 100%; padding: 5px;">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
+                <a href="/vendas" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+            </form>
+        </div>
+
+            <div th:if="${listaVendas.isEmpty()}" class="empty-message">
+                <p>Nenhuma venda encontrada.</p>
+            </div>
+
+            <table class="table table-striped" th:unless="${listaVendas.isEmpty()}">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Total</th>
+                    <th>Ação</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="venda : ${listaVendas}">
+                    <td th:text="${venda.id}"></td>
+                    <td th:text="${#temporals.format(venda.getData(), 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${venda.cliente != null ? (venda.cliente instanceof T(com.example.projetopweb.model.entity.PessoaFisica) ? venda.cliente.nome : venda.cliente.razaoSocial) : 'N/A'}"></td>
+                    <td th:text="|R$ ${#numbers.formatDecimal(venda.total(), 1, 2)}|"></td>
+                    <td>
+                        <a th:href="@{/vendas/{id}(id=${venda.id})}" class="btn btn-sm btn-outline-primary">Detalhes</a>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+    </main>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Empresas</h1>
+
+    <a href="/empresa/novo" class="btn btn-primary mb-3">+ Nova Empresa</a>
+
+    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+        <h3>Filtrar Empresas</h3>
+        <form method="get" action="/empresa" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+
+            <div style="flex: 1; min-width: 200px;">
+                <label for="razaoSocial">Razão Social:</label>
+                <input type="text" id="razaoSocial" name="razaoSocial" th:value="${razaoSocial}" placeholder="Buscar por razão social..." style="width: 100%; padding: 5px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
+            <a href="/empresa" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+        </form>
+    </div>
+
+    <div th:if="${listaEmpresas.isEmpty()}" class="empty-message">
+        <p>Nenhuma empresa cadastrada.</p>
+    </div>
+
+    <table class="table table-striped" th:unless="${listaEmpresas.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CNPJ</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="empresa : ${listaEmpresas}">
+            <td th:text="${empresa.id}"></td>
+            <td th:text="${empresa.razaoSocial}"></td>
+            <td th:text="${empresa.cnpj}"></td>
+            <td th:text="${empresa.email}"></td>
+            <td th:text="${empresa.telefone}"></td>
+            <td>
+                <a th:href="@{/vendas/empresa/{id}(id=${empresa.id})}" class="btn btn-sm btn-info">Compras</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+
+</html>

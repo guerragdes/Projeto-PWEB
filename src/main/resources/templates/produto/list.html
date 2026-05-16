@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Produtos</h1>
+
+    <a href="/produtos/novo" class="btn btn-primary mb-3">+ Novo Produto</a>
+
+    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+        <h3>Filtrar Produtos</h3>
+        <form method="get" action="/produtos" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+
+            <div style="flex: 1; min-width: 200px;">
+                <label for="descricao">Nome:</label>
+                <input type="text" id="descricao" name="descricao" th:value="${descricao}" placeholder="Buscar por nome..." style="width: 100%; padding: 5px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
+            <a href="/produtos" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+        </form>
+    </div>
+
+    <div th:if="${listaProdutos.isEmpty()}" class="empty-message">
+        <p>Nenhum produto cadastrado.</p>
+    </div>
+
+    <table class="table table-striped" th:unless="${listaProdutos.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="produto : ${listaProdutos}">
+            <td th:text="${produto.id}"></td>
+            <td th:text="${produto.descricao}"></td>
+            <td th:text="|R$ ${#numbers.formatDecimal(produto.valor, 1, 2)}|"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

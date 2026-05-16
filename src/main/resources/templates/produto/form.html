@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Novo Produto</h1>
+
+    <form th:action="@{/produtos}" th:object="${produto}" method="post" class="form-group">
+        <div class="mb-3">
+            <label for="descricao" class="form-label">Descrição:</label>
+            <input type="text" class="form-control" id="descricao" th:field="*{descricao}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="valor" class="form-label">Valor:</label>
+            <input type="number" class="form-control" id="valor" th:field="*{valor}" step="0.01" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Produto</button>
+        <a href="/produtos" class="btn btn-secondary">Cancelar</a>
+    </form>
+</main>
+</body>
+</html>

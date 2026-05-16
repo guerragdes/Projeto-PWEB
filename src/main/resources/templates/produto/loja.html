@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Loja de Produtos</h1>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px">
+        <div class="filter-form" style="flex: 1; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+            <form method="get" action="/produtos/loja" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                <div style="flex: 1; min-width: 200px;">
+                    <label for="descricao">Pesquisar:</label>
+                    <input type="text" id="descricao" name="descricao" th:value="${descricao}" placeholder="Buscar por produto..." style="width: 100%; padding: 5px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
+                <a href="/produtos/loja" class="btn btn-secondary" style="margin-top: 20px;">Limpar</a>
+            </form>
+        </div>
+        <a href="/carrinho" class="btn btn-info" style="margin-left: 10px; margin-top: 0;">Ver Carrinho</a>
+    </div>
+
+    <div th:if="${listaProdutos.isEmpty()}" class="empty-message" style="text-align: center; padding: 40px;">
+        <p style="font-size: 18px; color: #667;">Nenhum produto encontrado.</p>
+    </div>
+
+    <!-- Cards -->
+    <div class="row g-4" th:unless="${listaProdutos.isEmpty()}">
+        <div class="col-md-4 col-lg-3" th:each="produto : ${listaProdutos}">
+            <div class="card h-100 shadow-sm" style="transition: transform 0.2s; border: 1px solid #e0e0e0;">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title" th:text="${produto.descricao}">Descrição do Produto</h5>
+
+                    <div class="mt-auto">
+                        <p class="card-text text-danger fw-bold" style="font-size: 18px">
+                            <span th:text="|R$ ${#numbers.formatDecimal(produto.valor, 1, 2)}|">R$ 0,00</span>
+                        </p>
+
+                        <form th:action="@{/carrinho/adicionar/{id}(id=${produto.id})}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+    </style>
+</main>
+</body>
+</html>

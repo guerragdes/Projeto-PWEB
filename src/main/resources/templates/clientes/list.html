@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Clientes</h1>
+
+    <a href="/clientes/novo" class="btn btn-primary mb-3">+ Novo Cliente</a>
+
+    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
+        <h3>Filtrar Clientes</h3>
+        <form method="get" action="/clientes" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+
+            <div style="flex: 1; min-width: 200px;">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" th:value="${nome}" placeholder="Buscar por nome..." style="width: 100%; padding: 5px;">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Filtrar</button>
+            <a href="/clientes" class="btn btn-secondary" style="margin-top: 20px;">Limpar Filtros</a>
+        </form>
+    </div>
+
+    <div th:if="${listaClientes.isEmpty()}" class="empty-message">
+        <p>Nenhum cliente cadastrado.</p>
+    </div>
+
+    <table class="table table-striped" th:unless="${listaClientes.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Email</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${listaClientes}">
+            <td th:text="${cliente.id}"></td>
+            <td th:text="${cliente.nome}"></td>
+            <td th:text="${cliente.cpf}"></td>
+            <td th:text="${cliente.email}"></td>
+            <td th:text="${cliente.telefone}"></td>
+            <td>
+                <a th:href="@{/vendas/cliente/{id}(id=${cliente.id})}" class="btn btn-sm btn-info">Compras</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

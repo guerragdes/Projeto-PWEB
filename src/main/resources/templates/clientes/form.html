@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <h1>Novo Cliente</h1>
+
+    <form th:action="@{/clientes}" th:object="${cliente}" method="post" class="form-group"> 
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome:</label>
+            <input type="text" class="form-control" id="nome" th:field="*{nome}">
+            <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="cpf" class="form-label">CPF:</label>
+            <input type="text" class="form-control" id="cpf" th:field="*{cpf}">
+            <div class="text-danger" th:if="${#fields.hasErrors('cpf')}">
+                <span th:if="${#fields.hasGlobalErrors() or #lists.contains(#fields.detailedErrors('cpf').![code], 'NotBlank')}" 
+                th:text="#{NotBlank.cliente.cpf}"></span>
+          
+                <span th:if="${not #lists.contains(#fields.detailedErrors('cpf').![code], 'NotBlank') and #lists.contains(#fields.detailedErrors('cpf').![code], 'CPF')}" 
+                    th:text="#{CPF.cliente.cpf}"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" th:field="*{email}">
+            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone:</label>
+            <input type="text" class="form-control" id="telefone" th:field="*{telefone}">
+            <div class="text-danger" th:if="${#fields.hasErrors('telefone')}">
+                <span th:if="${#fields.hasGlobalErrors() or #lists.contains(#fields.detailedErrors('telefone').![code], 'NotBlank')}" 
+                th:text="#{NotBlank.cliente.telefone}"></span>
+          
+                <span th:if="${not #lists.contains(#fields.detailedErrors('telefone').![code], 'NotBlank') and #lists.contains(#fields.detailedErrors('telefone').![code], 'Pattern')}" 
+                    th:text="#{Pattern.cliente.telefone}"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Cliente</button>
+        <a href="/clientes" class="btn btn-secondary">Cancelar</a>
+    </form>
+</main>
+</body>
+</html>
