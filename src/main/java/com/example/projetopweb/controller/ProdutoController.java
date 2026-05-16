@@ -3,13 +3,17 @@ package com.example.projetopweb.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.projetopweb.model.entity.Produto;
 import com.example.projetopweb.model.repository.ProdutoRepository;
+
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -63,7 +67,10 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public String salvar(Produto produto) {
+    public String salvar(@ModelAttribute("produto") @Valid Produto produto, BindingResult result) {
+        if (result.hasErrors()) {
+            return "produto/form";
+        }
         produtoRepository.salvar(produto);
         return "redirect:/produtos"; // faz uma nova requisição http para /produtos, evitando reenvio de formulário
     }

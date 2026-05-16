@@ -9,12 +9,20 @@
     <form th:action="@{/produtos}" th:object="${produto}" method="post" class="form-group">
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição:</label>
-            <input type="text" class="form-control" id="descricao" th:field="*{descricao}" required>
+            <input type="text" class="form-control" id="descricao" th:field="*{descricao}">
+            <div class="text-danger" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
         </div>
 
         <div class="mb-3">
             <label for="valor" class="form-label">Valor:</label>
-            <input type="number" class="form-control" id="valor" th:field="*{valor}" step="0.01" required>
+            <input type="number" class="form-control" id="valor" th:field="*{valor}" step="0.01">
+            <div class="text-danger" th:if="${#fields.hasErrors('valor')}">
+                <span th:if="${#fields.hasGlobalErrors() or #lists.contains(#fields.detailedErrors('valor').![code], 'NotNull')}" 
+                    th:text="#{NotNull.produto.valor}"></span>
+                    
+                <span th:if="${not #lists.contains(#fields.detailedErrors('valor').![code], 'NotNull') and #lists.contains(#fields.detailedErrors('valor').![code], 'Positive')}" 
+                    th:text="#{Positive.produto.valor}"></span>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar Produto</button>

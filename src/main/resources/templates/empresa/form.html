@@ -36,7 +36,7 @@
                 th:text="#{NotBlank.empresa.telefone}"></span>
           
                 <span th:if="${not #lists.contains(#fields.detailedErrors('telefone').![code], 'NotBlank') and #lists.contains(#fields.detailedErrors('telefone').![code], 'Pattern')}" 
-                    th:text="#{Pattern.cliente.telefone}"></span>
+                    th:text="#{Pattern.empresa.telefone}"></span>
             </div>
         </div>
 
