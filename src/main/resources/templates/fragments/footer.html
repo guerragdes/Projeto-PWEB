@@ -1,5 +1,5 @@
-<footer class="mt-auto" th:fragment="footer" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 2rem 1.5rem; margin-top: 3rem; border-top: 1px solid #333;">
-    <div class="container-fluid" style="max-width: 1400px; margin: 0 auto;">
+<footer class="mt-auto" th:fragment="footer" style="background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%); color: white; padding: 2rem 2.5rem; margin-top: 3rem; border-top: 1px solid #333; display: flex; justify-content: center; width: 100%;">
+    <div style="max-width: 1200px; width: 100%;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
             <div>
                 <p style="margin: 0; font-weight: 500;">© 2026 João Paulo Guerra</p>
@@ -25,14 +25,37 @@
         text-decoration: underline !important;
     }
 
-    @media (max-width: 768px) {
+    @media (min-width: 1600px) {
         footer {
-            padding: 1.5rem 1rem !important;
+            padding: 2.5rem 4rem !important;
         }
 
         footer > div {
+            padding: 0 !important;
+        }
+    }
+
+    @media (max-width: 768px) {
+        footer {
+            padding: 1.5rem 1.5rem !important;
+        }
+
+        footer > div {
+            padding: 0 !important;
+            display: flex;
             flex-direction: column;
             text-align: center;
+        }
+
+        footer > div > div:first-child {
+            flex-direction: column;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        footer > div > div:last-child {
+            flex-direction: column;
+            justify-content: center;
         }
     }
 </style>

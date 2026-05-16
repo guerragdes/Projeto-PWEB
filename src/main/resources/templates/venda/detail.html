@@ -30,17 +30,17 @@
                     <h5 class="card-title">Informações do Cliente</h5>
                     <hr>
                     <div th:if="${venda.cliente}" style="line-height: 1.8;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <strong>Cliente:</strong>
-                            <span th:text="${venda.cliente instanceof T(com.example.projetopweb.model.entity.PessoaFisica) ? venda.cliente.nome : venda.cliente.razaoSocial}"></span>
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
+                            <strong style="white-space: nowrap;">Cliente:</strong>
+                            <span style="word-break: break-word;" th:text="${venda.cliente instanceof T(com.example.projetopweb.model.entity.PessoaFisica) ? venda.cliente.nome : venda.cliente.razaoSocial}"></span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <strong>Email:</strong>
-                            <span th:text="${venda.cliente.email}"></span>
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
+                            <strong style="white-space: nowrap;">Email:</strong>
+                            <span style="word-break: break-word;" th:text="${venda.cliente.email}"></span>
                         </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <strong>Telefone:</strong>
-                            <span th:text="${venda.cliente.telefone}"></span>
+                        <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start;">
+                            <strong style="white-space: nowrap;">Telefone:</strong>
+                            <span style="word-break: break-word;" th:text="${venda.cliente.telefone}"></span>
                         </div>
                     </div>
                 </div>
