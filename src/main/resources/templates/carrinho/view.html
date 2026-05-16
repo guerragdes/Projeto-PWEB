@@ -61,7 +61,7 @@
                     <form th:action="@{/carrinho/finalizar}" method="post">
                         <div class="mb-3">
                             <label for="clienteId" class="form-label">Cliente</label>
-                            <select id="clienteId" name="clienteId" class="form-select" required>
+                            <select id="clienteId" name="clienteId" class="form-select">
                                 <option value="">-- Selecione um Cliente --</option>
                                 <option th:each="cliente : ${clientes}"
                                         th:value="${cliente.id}"
@@ -69,6 +69,7 @@
                                     Cliente
                                 </option>
                             </select>
+                            <div class="text-danger" th:if="${erroKey}" th:text="#{${erroKey}}"></div>
                         </div>
                         <div class="d-flex gap-2">
                             <button type="submit" class="btn btn-success btn-lg">Finalizar Compra</button>

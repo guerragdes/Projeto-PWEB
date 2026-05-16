@@ -1,6 +1,7 @@
 package com.example.projetopweb.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,10 +15,12 @@ public class Venda implements Serializable {
     @Id
     private Long id;
 
+    @NotNull
     private LocalDateTime data;
 
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
+    @NotNull
     private Pessoa cliente;
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)

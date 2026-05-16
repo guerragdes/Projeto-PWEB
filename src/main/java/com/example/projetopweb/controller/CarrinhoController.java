@@ -70,19 +70,32 @@ public class CarrinhoController {
         return "redirect:/carrinho";
     }
 
-    @PostMapping("/finalizar")
-    public String finalizarCompra(
-            @RequestParam Long clienteId) {
+        @PostMapping("/finalizar")
+        public String finalizarCompra(
+            @RequestParam(required = false) Long clienteId,
+            Model model) {
         
         // Verifica se o carrinho está vazio antes de finalizar a compra
         if (carrinhoService.estaVazio()) {
             return "redirect:/carrinho";
         }
 
+        if (clienteId == null) {
+            model.addAttribute("itens", carrinhoService.obterItens());
+            model.addAttribute("total", carrinhoService.calcularTotal());
+            model.addAttribute("clientes", pessoaRepository.buscarTodas());
+            model.addAttribute("erroKey", "NotNull.venda.cliente");
+            return "carrinho/view";
+        }
+
         // Verifica se o cliente existe antes de finalizar a compra
         Optional<Pessoa> clienteOpt = pessoaRepository.buscarPorId(clienteId);
         if (clienteOpt.isEmpty()) {
-            return "redirect:/carrinho";
+            model.addAttribute("itens", carrinhoService.obterItens());
+            model.addAttribute("total", carrinhoService.calcularTotal());
+            model.addAttribute("clientes", pessoaRepository.buscarTodas());
+            model.addAttribute("erroKey", "NotFound.venda.cliente");
+            return "carrinho/view";
         }
 
         // Cria a venda e associa os itens do carrinho
