@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.projetopweb.model.entity.Pessoa;
 import com.example.projetopweb.model.entity.Produto;
@@ -46,14 +47,15 @@ public class CarrinhoController {
     }
 
     @PostMapping("/adicionar/{produtoId}")
-    public String adicionarProduto(@PathVariable Long produtoId) {
+    public String adicionarProduto(@PathVariable Long produtoId, RedirectAttributes redirectAttributes) {
         Optional<Produto> produtoOpt = produtoRepository.buscarPorId(produtoId);
         
         if (produtoOpt.isPresent()) {
             carrinhoService.adicionarProduto(produtoOpt.get()); // Só adiciona se o produto existir
+            redirectAttributes.addFlashAttribute("SucessoKey", "Produto adicionado ao carrinho com sucesso!");
         }
 
-        return "redirect:/carrinho";
+        return "redirect:/produtos/loja";
     }
 
     @PostMapping("/remover/{produtoId}")

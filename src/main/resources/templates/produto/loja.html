@@ -4,7 +4,7 @@
 
 <body>
 <main>
-    <div class="mb-5">
+    <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
             <h1 class="mb-0">Loja de Produtos</h1>
             <a href="/carrinho" class="btn btn-primary btn-lg position-relative" style="border-radius: 12px; padding: 0.6rem 1.5rem;">
@@ -15,9 +15,9 @@
             </a>
         </div>
 
-        <div class="filter-form p-4 mb-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <div class="filter-form p-3 mb-3" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <form method="get" action="/produtos/loja" class="d-flex flex-wrap gap-3 align-items-end">
-                <div style="flex: 1; min-width: 250px;">
+                <div style="flex: 1; min-width: 230px;">
                     <label for="descricao" class="form-label fw-500">Pesquisar Produto:</label>
                     <input type="text" id="descricao" name="descricao" th:value="${descricao}" 
                            placeholder="Digite o nome do produto..." 
@@ -34,6 +34,11 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div th:if="${SucessoKey}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${SucessoKey}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
     <div th:if="${listaProdutos.isEmpty()}" class="empty-message text-center py-5" style="background: #f9fafb; border-radius: 12px; border: 2px dashed #e0e0e0;">
@@ -107,6 +112,12 @@
         .form-control:focus {
             border-color: #0066cc !important;
             box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
+        }
+
+        /* Reduce only the gap between the filter bar and a following alert
+           without changing the spacing between the filter and the product cards. */
+        .filter-form + .alert {
+            margin-top: 0.5rem !important;
         }
 
         @media (max-width: 768px) {
