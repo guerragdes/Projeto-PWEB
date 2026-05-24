@@ -10,31 +10,71 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="gap: 0.5rem;">
-                <li class="nav-item">
+                <!-- Classe principal acessivel para os autenticados -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/clientes" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         👥 Clientes
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/empresa" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         🏢 Empresas
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/produtos" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         📦 Produtos
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/produtos/loja" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         🛒 Loja
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/vendas" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         📊 Vendas
                     </a>
                 </li>
+
+                <!-- Menu administrativo apenas para admins -->
+                <li class="nav-item dropdown" sec:authorize="hasAnyRole('ADMIN')" style="border-left: 1px solid rgba(255,255,255,0.3); padding-left: 1rem; margin-left: 0.5rem;">
+                    
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                       style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
+                        ⚙️ Admin
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/clientes/novo">➕ Novo Cliente</a></li>
+                        <li><a class="dropdown-item" href="/empresa/novo">➕ Nova Empresa</a></li>
+                        <li><a class="dropdown-item" href="/produtos/novo">➕ Novo Produto</a></li>
+                    </ul>
+               </li>
+
+               <!-- Seção do usuario para autenticados -->
+               <li class="nav-item" sec:authorize="isAuthenticated()" style="border-left: 1px solid rgba(255,255,255,0.3); padding-left: 1rem; margin-left: 0.5rem; display: flex; align-items: center;">
+
+                    <div style="display: flex; align-items: center; gap: 1rem; color: white; flex-wrap: wrap;">
+                        <span style="font-weight: 500; white-space: nowrap;">
+                            👤 <strong sec:authentication="name"></strong>
+                        </span>
+
+                        <form th:action="@{/logout}" method="post" style="display: inline; margin: 0;">
+                            <button type="submit" class="btn btn-outline-light btn-sm" style="padding: 0.4rem 0.8rem; font-size: 0.875rem; white-space: nowrap;">
+                                🚪 Sair
+                            </button>
+                        </form>
+                    </div>
+               </li>
+
+               <!-- Link de login para não-autenticados -->
+                <li class="nav-item" sec:authorize="!isAuthenticated()" style="border-left: 1px solid rgba(255,255,255,0.3); padding-left: 1rem; margin-left: 0.5rem;">
+                    <a class="nav-link" href="/login" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
+                        🔑 Login
+                    </a>
+                </li>
+
             </ul>
         </div>
     </div>
