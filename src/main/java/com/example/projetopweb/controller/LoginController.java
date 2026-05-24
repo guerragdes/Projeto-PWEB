@@ -11,4 +11,6 @@ public class LoginController {
     public String login() {
         return "login/login"; // Retorna a view de login (src/main/resources/templates/login/login.html)
     }
+
+    // Importante: Esta classe dialoga com o Spring MVC para renderizar a pagina de login personalizada. Quem estabelece a pagina de login personalizada é a classe SecurityConfiguration, onde definimos o caminho da pagina de login com .loginPage("/login").
 }

@@ -1,11 +1,301 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no"/>
+        <title>Login - Sistema de Vendas</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: #fafbfc;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .navbar {
+                background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+                box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15);
+                padding: 0.75rem 1.5rem;
+            }
+
+            .navbar-brand {
+                color: white !important;
+                font-size: 1.5rem;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+            }
+
+            .login-container {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem 1rem;
+            }
+
+            .login-wrapper {
+                width: 100%;
+                max-width: 450px;
+            }
+
+            .card {
+                border: none;
+                border-radius: 12px;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+                overflow: hidden;
+            }
+
+            .card-header {
+                background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+                border: none;
+            }
+
+            .card-header h5 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+            }
+
+            .card-body {
+                padding: 40px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #333;
+                font-size: 14px;
+            }
+
+            .form-control {
+                padding: 12px 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 6px;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                background-color: #fafbfc;
+            }
+
+            .form-control:focus {
+                border-color: #0066cc;
+                box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
+                background-color: white;
+            }
+
+            .btn-primary {
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+                border: none;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 16px;
+                transition: all 0.3s ease;
+                margin-top: 10px;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3);
+                background: linear-gradient(135deg, #0052a3 0%, #003d7a 100%);
+                color: white;
+            }
+
+            .alert {
+                border: none;
+                border-radius: 6px;
+                margin-bottom: 20px;
+            }
+
+            .alert-danger {
+                background-color: #f8d7da;
+                color: #721c24;
+                border-left: 4px solid #f5c6cb;
+            }
+
+            .remember-me {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 15px 0;
+            }
+
+            .remember-me input[type="checkbox"] {
+                cursor: pointer;
+                width: 18px;
+                height: 18px;
+                accent-color: #0066cc;
+            }
+
+            .remember-me label {
+                margin: 0;
+                cursor: pointer;
+                font-weight: normal;
+                font-size: 14px;
+                color: #333;
+            }
+
+            .footer {
+                background-color: #f5f7fa;
+                border-top: 1px solid #e0e0e0;
+                padding: 2rem 1rem;
+                text-align: center;
+                color: #667;
+                font-size: 14px;
+                margin-top: auto;
+            }
+
+            .test-info {
+                background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
+                border-radius: 8px;
+                padding: 15px;
+                margin-top: 25px;
+                border-left: 4px solid #0066cc;
+            }
+
+            .test-info h6 {
+                color: #0066cc;
+                font-weight: 600;
+                margin-bottom: 10px;
+                font-size: 13px;
+            }
+
+            .test-info p {
+                margin: 5px 0;
+                font-size: 13px;
+                color: #667;
+            }
+
+            .test-info code {
+                background: #e8eef5;
+                padding: 2px 6px;
+                border-radius: 4px;
+                color: #0066cc;
+                font-weight: 500;
+            }
+
+            @media (max-width: 768px) {
+                .login-container {
+                    padding: 1rem;
+                }
+
+                .card-body {
+                    padding: 30px;
+                }
+
+                .card-header h5 {
+                    font-size: 20px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- Header padrão do site -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">💼 Loja Virtual</a>
+                <span style="color: white; font-size: 14px;">Faça login para continuar</span>
+            </div>
+        </nav>
+
+        <!-- Conteúdo do login -->
+        <div class="login-container">
+            <div class="login-wrapper">
+                <!-- Mensagem de erro -->
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>❌ Erro!</strong> Usuário ou senha inválidos. Tente novamente.
+                    </div>
+                </div>
+
+                <!-- Cartão com o formulário -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>🔐 Acesse sua Conta</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <!-- Formulário de login -->
+                        <form th:action="@{/login}" method="post">
+                            <!-- Campo de Usuário -->
+                            <div class="form-group">
+                                <label for="username">👤 Usuário:</label>
+                                <input class="form-control" 
+                                       id="username"
+                                       type="text"
+                                       name="username" 
+                                       placeholder="Digite seu usuário"
+                                       required
+                                       autofocus/>
+                            </div>
+
+                            <!-- Campo de Senha -->
+                            <div class="form-group">
+                                <label for="password">🔑 Senha:</label>
+                                <input class="form-control"
+                                       id="password"
+                                       type="password" 
+                                       name="password" 
+                                       placeholder="Digite sua senha"
+                                       required/>
+                            </div>
+
+                            <!-- Checkbox Remember-me -->
+                            <div class="remember-me">
+                                <input type="checkbox" 
+                                       id="remember" 
+                                       name="remember-me" 
+                                       value="true">
+                                <label for="remember">Lembrar-me neste dispositivo</label>
+                            </div>
+
+                            <!-- Botão de Login -->
+                            <button type="submit" class="btn btn-primary">✨ Entrar</button>
+                        </form>
+
+                        <!-- Informações de teste -->
+                        <div class="test-info">
+                            <h6>👥 Usuários de Teste:</h6>
+                            <p><strong>Usuário comum:</strong> <code>user</code> / <code>123</code></p>
+                            <p><strong>Administrador:</strong> <code>admin</code> / <code>admin</code></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer padrão do site -->
+        <footer class="footer">
+            <p>&copy; 2026 Loja Virtual</p>
+        </footer>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
+                integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7FIc7" 
+                crossorigin="anonymous"></script>
+    </body>
+
 </html>
