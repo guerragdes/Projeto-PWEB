@@ -77,7 +77,7 @@ public class SecurityConfiguration {
             .roles("ADMIN")
             .build();
 
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(user, admin); // Guarda usuarios na memoria (apenas para testes, não recomendado para produção)
     }
 
     @Bean
