@@ -25,6 +25,10 @@ public abstract class Pessoa implements Serializable {
     @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$")
     private String telefone;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
     public Pessoa() {
     }
 
@@ -57,8 +61,17 @@ public abstract class Pessoa implements Serializable {
         this.telefone = telefone;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     // Nome exibido para opções (pode ser nome ou razão social)
     public String getDisplayName() {
         return "";
     }
 }
+

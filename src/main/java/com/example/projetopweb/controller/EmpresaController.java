@@ -3,13 +3,16 @@ package com.example.projetopweb.controller;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.projetopweb.model.entity.PessoaJuridica;
+import com.example.projetopweb.model.entity.Role;
 import com.example.projetopweb.model.repository.EmpresaRepository;
+import com.example.projetopweb.model.repository.RoleRepository;
 
 import java.util.List;
 
@@ -19,6 +22,12 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaRepository empresaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping
     public String listar(
@@ -49,6 +58,7 @@ public class EmpresaController {
         if (result.hasErrors()) {
             return "empresa/form";
         }
+
         empresaRepository.salvar(empresa);
         return "redirect:/empresa";
     }

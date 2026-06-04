@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, user-scalable=no"/>
-        <title>Login - Sistema de Vendas</title>
+        <title>Criar Conta - Sistema de Vendas</title>
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -42,14 +42,10 @@
                 color: rgba(255, 255, 255, 0.85) !important;
                 font-size: 14px;
                 text-decoration: none;
-                border: 1px solid rgba(255,255,255,0.5);
-                padding: 6px 14px;
-                border-radius: 20px;
-                transition: all 0.2s ease;
+                transition: color 0.2s ease;
             }
 
             .navbar-link:hover {
-                background-color: rgba(255,255,255,0.15);
                 color: white !important;
             }
 
@@ -87,6 +83,12 @@
                 font-weight: 600;
             }
 
+            .card-header p {
+                margin: 8px 0 0 0;
+                font-size: 14px;
+                opacity: 0.85;
+            }
+
             .card-body {
                 padding: 40px;
             }
@@ -110,12 +112,14 @@
                 font-size: 14px;
                 transition: all 0.3s ease;
                 background-color: #fafbfc;
+                width: 100%;
             }
 
             .form-control:focus {
                 border-color: #0066cc;
                 box-shadow: 0 0 0 0.2rem rgba(0, 102, 204, 0.25);
                 background-color: white;
+                outline: none;
             }
 
             .btn-primary {
@@ -129,6 +133,7 @@
                 transition: all 0.3s ease;
                 margin-top: 10px;
                 color: white;
+                cursor: pointer;
             }
 
             .btn-primary:hover {
@@ -148,28 +153,59 @@
                 background-color: #f8d7da;
                 color: #721c24;
                 border-left: 4px solid #f5c6cb;
+                padding: 12px 16px;
             }
 
-            .remember-me {
+            .divider {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                margin: 15px 0;
+                margin: 20px 0;
+                color: #aaa;
+                font-size: 13px;
             }
 
-            .remember-me input[type="checkbox"] {
-                cursor: pointer;
-                width: 18px;
-                height: 18px;
-                accent-color: #0066cc;
+            .divider::before,
+            .divider::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: #e0e0e0;
             }
 
-            .remember-me label {
-                margin: 0;
-                cursor: pointer;
-                font-weight: normal;
+            .divider span {
+                padding: 0 12px;
+            }
+
+            .link-login {
+                display: block;
+                text-align: center;
+                color: #0066cc;
                 font-size: 14px;
-                color: #333;
+                text-decoration: none;
+                font-weight: 500;
+                padding: 10px;
+                border-radius: 6px;
+                border: 2px solid #0066cc;
+                transition: all 0.3s ease;
+            }
+
+            .link-login:hover {
+                background-color: #0066cc;
+                color: white;
+            }
+
+            .info-box {
+                background: linear-gradient(135deg, #f0f7ff 0%, #fff 100%);
+                border-radius: 8px;
+                padding: 14px;
+                margin-top: 20px;
+                border-left: 4px solid #0066cc;
+                font-size: 13px;
+                color: #555;
+            }
+
+            .info-box p {
+                margin: 0;
             }
 
             .footer {
@@ -180,35 +216,6 @@
                 color: #667;
                 font-size: 14px;
                 margin-top: auto;
-            }
-
-            .test-info {
-                background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%);
-                border-radius: 8px;
-                padding: 15px;
-                margin-top: 25px;
-                border-left: 4px solid #0066cc;
-            }
-
-            .test-info h6 {
-                color: #0066cc;
-                font-weight: 600;
-                margin-bottom: 10px;
-                font-size: 13px;
-            }
-
-            .test-info p {
-                margin: 5px 0;
-                font-size: 13px;
-                color: #667;
-            }
-
-            .test-info code {
-                background: #e8eef5;
-                padding: 2px 6px;
-                border-radius: 4px;
-                color: #0066cc;
-                font-weight: 500;
             }
 
             @media (max-width: 768px) {
@@ -228,100 +235,95 @@
     </head>
 
     <body>
-        <!-- Header padrão do site -->
+        <!-- Header -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid d-flex justify-content-between align-items-center">
                 <a class="navbar-brand" href="/">💼 Loja Virtual</a>
-                <a class="navbar-link" th:href="@{/cadastro}">✏️ Criar Conta</a>
+                <a class="navbar-link" th:href="@{/login}">← Voltar ao Login</a>
             </div>
         </nav>
 
-        <!-- Conteúdo do login -->
+        <!-- Conteúdo do cadastro -->
         <div class="login-container">
             <div class="login-wrapper">
-                <!-- Mensagem de erro -->
-                <div th:if="${param.error}">
-                    <div class="alert alert-danger" role="alert">
-                        <strong>❌ Erro!</strong> Usuário ou senha inválidos. Tente novamente.
-                    </div>
-                </div>
 
-                <!-- Mensagem de sucesso após cadastro -->
-                <div th:if="${param.cadastrado}">
-                    <div class="alert" style="background-color:#d4edda; color:#155724; border-left: 4px solid #c3e6cb;" role="alert">
-                        <strong>✅ Conta criada!</strong> Agora você pode fazer login.
+                <!-- Mensagem de erro -->
+                <div th:if="${erro}">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>❌ Erro!</strong> <span th:text="${erro}"></span>
                     </div>
                 </div>
 
                 <!-- Cartão com o formulário -->
                 <div class="card">
                     <div class="card-header">
-                        <h5>🔐 Acesse sua Conta</h5>
+                        <h5>📝 Criar Nova Conta</h5>
+                        <p>Preencha os dados abaixo para se cadastrar</p>
                     </div>
 
                     <div class="card-body">
-                        <!-- Formulário de login -->
-                        <form th:action="@{/login}" method="post">
-                            <!-- Campo de Usuário -->
+                        <form th:action="@{/cadastro}" method="post">
+
+                            <!-- Campo de Login -->
                             <div class="form-group">
-                                <label for="username">👤 Usuário:</label>
-                                <input class="form-control" 
-                                       id="username"
+                                <label for="login">👤 Login:</label>
+                                <input class="form-control"
+                                       id="login"
                                        type="text"
-                                       name="username" 
-                                       placeholder="Digite seu usuário"
+                                       name="login"
+                                       placeholder="Escolha um nome de usuário"
                                        required
                                        autofocus/>
                             </div>
 
                             <!-- Campo de Senha -->
                             <div class="form-group">
-                                <label for="password">🔑 Senha:</label>
+                                <label for="senha">🔑 Senha:</label>
                                 <input class="form-control"
-                                       id="password"
-                                       type="password" 
-                                       name="password" 
-                                       placeholder="Digite sua senha"
+                                       id="senha"
+                                       type="password"
+                                       name="senha"
+                                       placeholder="Crie uma senha"
                                        required/>
                             </div>
 
-                            <!-- Checkbox Remember-me -->
-                            <div class="remember-me">
-                                <input type="checkbox" 
-                                       id="remember" 
-                                       name="remember-me" 
-                                       value="true">
-                                <label for="remember">Lembrar-me neste dispositivo</label>
+                            <!-- Campo de Confirmação de Senha -->
+                            <div class="form-group">
+                                <label for="confirmaSenha">🔒 Confirmar Senha:</label>
+                                <input class="form-control"
+                                       id="confirmaSenha"
+                                       type="password"
+                                       name="confirmaSenha"
+                                       placeholder="Repita a senha"
+                                       required/>
                             </div>
 
-                            <!-- Botão de Login -->
-                            <button type="submit" class="btn btn-primary">✨ Entrar</button>
+                            <!-- Botão de Cadastro -->
+                            <button type="submit" class="btn btn-primary">✅ Criar Conta</button>
                         </form>
 
-                        <div style="text-align:center; margin-top:20px; padding-top:20px; border-top:1px solid #e0e0e0;">
-                            <span style="font-size:13px; color:#666;">Não tem conta? </span>
-                            <a th:href="@{/cadastro}" style="font-size:13px; color:#0066cc; font-weight:600; text-decoration:none;">Crie uma agora →</a>
-                        </div>
+                        <div class="divider"><span>ou</span></div>
 
-                        <!-- Informações de teste -->
-                        <div class="test-info">
-                            <h6>👥 Usuários de Teste:</h6>
-                            <p><strong>Usuário comum:</strong> <code>user</code> / <code>123</code></p>
-                            <p><strong>Administrador:</strong> <code>admin</code> / <code>admin</code></p>
+                        <!-- Link para voltar ao login -->
+                        <a th:href="@{/login}" class="link-login">🔐 Já tenho uma conta</a>
+
+                        <!-- Informação -->
+                        <div class="info-box">
+                            <p>ℹ️ Ao criar uma conta, você terá acesso como <strong>usuário comum</strong> ao sistema.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer padrão do site -->
+        <!-- Footer -->
         <footer class="footer">
             <p>&copy; 2026 Loja Virtual – Por João Paulo Guerra</p>
         </footer>
 
         <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" 
-                integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7FIc7" 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7FIc7"
                 crossorigin="anonymous"></script>
     </body>
 
