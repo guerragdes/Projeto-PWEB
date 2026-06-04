@@ -39,3 +39,18 @@ INSERT INTO item (produto_id, quantidade, venda_id) VALUES (3, 2, 5);
 INSERT INTO item (produto_id, quantidade, venda_id) VALUES (3, 1, 6);
 INSERT INTO item (produto_id, quantidade, venda_id) VALUES (2, 1, 7);
 INSERT INTO item (produto_id, quantidade, venda_id) VALUES (1, 3, 5);
+
+-- Roles (Papéis de Usuário)
+INSERT INTO role (nome) VALUES ('ROLE_ADMIN');
+INSERT INTO role (nome) VALUES ('ROLE_USER');
+
+-- Usuários (senhas criptografadas com BCrypt)
+-- Senha do admin: admin | Senha do user: 123
+INSERT INTO usuario (login, senha) VALUES ('admin', '$2a$10$uaPTPJQUXQk/KOyaNrQjP.5uXsXbV89BaIlK19R3aBU8gyTBncX3y');
+INSERT INTO usuario (login, senha) VALUES ('user', '$2a$10$z3kW8ZjqBij7M.sgTSjlqOGJOxL55/2nA1uLgViMvWrEblKtV4vVu');
+
+-- Associação de Roles aos Usuários (tabela de junção)
+-- admin -> ROLE_ADMIN
+INSERT INTO usuario_roles (usuario_id, role_id) VALUES (1, 1);
+-- user -> ROLE_USER
+INSERT INTO usuario_roles (usuario_id, role_id) VALUES (2, 2);
