@@ -51,6 +51,6 @@ INSERT INTO usuario (login, senha) VALUES ('user', '$2a$10$z3kW8ZjqBij7M.sgTSjlq
 
 -- Associação de Roles aos Usuários (tabela de junção)
 -- admin -> ROLE_ADMIN
-INSERT INTO usuario_roles (usuario_id, role_id) VALUES (1, 1);
+INSERT INTO usuario_roles (usuarios_id, roles_id) VALUES (1, 1);
 -- user -> ROLE_USER
-INSERT INTO usuario_roles (usuario_id, role_id) VALUES (2, 2);
+INSERT INTO usuario_roles (usuarios_id, roles_id) VALUES (2, 2);
