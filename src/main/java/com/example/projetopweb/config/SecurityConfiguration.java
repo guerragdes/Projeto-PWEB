@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                 customizer -> customizer
                         // ===== ACESSO AO PÚBLICO =====
                         .requestMatchers("/login").permitAll() // Pagina de login
+                        .requestMatchers("/cadastro").permitAll() // Pagina de cadastro de novos usuários
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll() // Recursos
                                                                                                       // estáticos
                         .requestMatchers("/produtos/loja").permitAll() // Pagina da loja
