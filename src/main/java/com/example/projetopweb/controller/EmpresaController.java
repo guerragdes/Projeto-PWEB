@@ -59,14 +59,6 @@ public class EmpresaController {
             return "empresa/form";
         }
 
-        // Encodar a senha
-        String senhaCriptografada = passwordEncoder.encode(empresa.getUsuario().getSenha());
-        empresa.getUsuario().setSenha(senhaCriptografada);
-
-        // Atribuir roles
-        Role roleUser = roleRepository.buscarPorNome("ROLE_USER");
-        empresa.getUsuario().getRoles().add(roleUser);
-
         empresaRepository.salvar(empresa);
         return "redirect:/empresa";
     }

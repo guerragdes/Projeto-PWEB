@@ -62,14 +62,6 @@ public class ClienteController {
             return "clientes/form";
         }
 
-        // Encodar a senha
-        String senhaCriptografada = passwordEncoder.encode(cliente.getUsuario().getSenha());
-        cliente.getUsuario().setSenha(senhaCriptografada);
-
-        // Atribuir roles
-        Role roleUser = roleRepository.buscarPorNome("ROLE_USER");
-        cliente.getUsuario().getRoles().add(roleUser);
-
         clienteRepository.salvar(cliente);
         return "redirect:/clientes";
     }
