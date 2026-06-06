@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.projetopweb.model.entity.Pessoa;
 import com.example.projetopweb.model.entity.PessoaFisica;
 import com.example.projetopweb.model.entity.PessoaJuridica;
+import com.example.projetopweb.model.entity.Usuario;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +49,21 @@ public class PessoaRepository {
 
     public List<PessoaJuridica> buscarTodasPJ() {
         Query query = em.createQuery("SELECT p FROM PessoaJuridica p ORDER BY p.razaoSocial");
+        return query.getResultList();
+    }
+
+    public List<Usuario> buscarUsuarioPorNome(String nome) {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY u.nome");
+        query.setParameter("nome", nome);
+        return query.getResultList();
+    }
+
+    public Optional<Usuario> buscarUsuarioPorLogin(String login) {
+        return Optional.ofNullable(em.find(Usuario.class, login));
+    }
+
+    public List<Usuario> buscarTodosUsuarios() {
+        Query query = em.createQuery("SELECT u FROM Usuario u ORDER BY u.nome");
         return query.getResultList();
     }
 }

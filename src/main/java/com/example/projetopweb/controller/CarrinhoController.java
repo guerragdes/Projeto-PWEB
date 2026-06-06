@@ -1,6 +1,7 @@
 package com.example.projetopweb.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -8,15 +9,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.projetopweb.model.entity.Pessoa;
 import com.example.projetopweb.model.entity.Produto;
+import com.example.projetopweb.model.entity.Usuario;
 import com.example.projetopweb.model.entity.Venda;
-import com.example.projetopweb.model.repository.ClienteRepository;
 import com.example.projetopweb.model.repository.PessoaRepository;
 import com.example.projetopweb.model.repository.ProdutoRepository;
 import com.example.projetopweb.model.repository.VendaRepository;
 import com.example.projetopweb.service.CarrinhoService;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,16 +33,13 @@ public class CarrinhoController {
     VendaRepository vendaRepository;
 
     @Autowired
-    ClienteRepository clienteRepository;
-
-    @Autowired
     PessoaRepository pessoaRepository;
 
     @GetMapping
-    public String visualizar(Model model) {
+    public String visualizar(Model model, @AuthenticationPrincipal Usuario usuario) {
         model.addAttribute("itens", carrinhoService.obterItens());
         model.addAttribute("total", carrinhoService.calcularTotal());
-        model.addAttribute("clientes", pessoaRepository.buscarTodas());
+        model.addAttribute("nomeUsuario", usuario.getDisplayName());
         return "carrinho/view";
     }
 
@@ -72,32 +69,26 @@ public class CarrinhoController {
         return "redirect:/carrinho";
     }
 
-        @PostMapping("/finalizar")
-        public String finalizarCompra(
-            @RequestParam(required = false) Long clienteId,
-            Model model) {
+    @PostMapping("/finalizar")
+    public String finalizarCompra(
+            @AuthenticationPrincipal Usuario usuario,
+            RedirectAttributes redirectAttributes) {
         
         // Verifica se o carrinho está vazio antes de finalizar a compra
         if (carrinhoService.estaVazio()) {
             return "redirect:/carrinho";
         }
 
-        if (clienteId == null) {
-            model.addAttribute("itens", carrinhoService.obterItens());
-            model.addAttribute("total", carrinhoService.calcularTotal());
-            model.addAttribute("clientes", pessoaRepository.buscarTodas());
-            model.addAttribute("erroKey", "NotNull.venda.cliente");
-            return "carrinho/view";
-        }
+        // Busca a entidade Pessoa gerenciada pelo JPA a partir do ID do usuário logado.
+        // Isso é necessário porque o objeto "usuario" vindo do Spring Security
+        // está desanexado da sessão JPA atual (foi carregado em outra transação,
+        // no momento do login). Sem isso, o Hibernate lançaria um erro ao tentar
+        // salvar a Venda com uma entidade não-gerenciada.
+        Optional<Pessoa> clienteOpt = pessoaRepository.buscarPorId(usuario.getId());
 
-        // Verifica se o cliente existe antes de finalizar a compra
-        Optional<Pessoa> clienteOpt = pessoaRepository.buscarPorId(clienteId);
         if (clienteOpt.isEmpty()) {
-            model.addAttribute("itens", carrinhoService.obterItens());
-            model.addAttribute("total", carrinhoService.calcularTotal());
-            model.addAttribute("clientes", pessoaRepository.buscarTodas());
-            model.addAttribute("erroKey", "NotFound.venda.cliente");
-            return "carrinho/view";
+            redirectAttributes.addFlashAttribute("erroKey", "NotFound.venda.cliente");
+            return "redirect:/carrinho";
         }
 
         // Cria a venda e associa os itens do carrinho

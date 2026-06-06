@@ -1,7 +1,6 @@
 package com.example.projetopweb.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,7 +25,9 @@ public class UsuarioDetailsConfig implements UserDetailsService {
             throw new UsernameNotFoundException("Usuário não encontrado: " + login);
         }
 
-        return new User(usuario.getLogin(), usuario.getPassword(), true, true, true, true, usuario.getAuthorities());
+        // Usuario já implementa UserDetails — retorna diretamente para preservar
+        // as roles carregadas pelo Hibernate sem nenhuma transformação intermediária
+        return usuario;
     }
     
 }

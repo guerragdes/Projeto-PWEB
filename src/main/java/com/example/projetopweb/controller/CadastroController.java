@@ -37,7 +37,10 @@ public class CadastroController {
     @PostMapping
     public String cadastrar(
             @RequestParam String login,
+            @RequestParam String nome,
+            @RequestParam String email,
             @RequestParam String senha,
+            @RequestParam String telefone,
             @RequestParam String confirmaSenha,
             Model model) {
 
@@ -53,9 +56,18 @@ public class CadastroController {
             return "login/cadastro";
         }
 
+        // Verifica se o email já existe
+        if (usuarioRepository.usuarioPorEmail(email) != null) {
+            model.addAttribute("erro", "Este email já está cadastrado. Escolha outro.");
+            return "login/cadastro";
+        }
+
         // Cria o novo usuário
         Usuario novoUsuario = new Usuario();
         novoUsuario.setLogin(login);
+        novoUsuario.setNome(nome);
+        novoUsuario.setEmail(email);
+        novoUsuario.setTelefone(telefone);
         novoUsuario.setSenha(passwordEncoder.encode(senha));
 
         // Atribui o papel ROLE_USER (apenas usuários comuns podem se cadastrar)

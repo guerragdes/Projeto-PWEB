@@ -19,8 +19,19 @@ public class UsuarioRepository {
     // Método para buscar um usuário pelo login
     public Usuario usuario(String login) {
         try {
-            Query query = em.createQuery("SELECT u FROM Usuario u JOIN FETCH u.roles WHERE u.login = :login");
+            Query query = em.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.login = :login");
             query.setParameter("login", login);
+            return (Usuario) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    // Método para buscar um usuário pelo email
+    public Usuario usuarioPorEmail(String email) {
+        try {
+            Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.email = :email");
+            query.setParameter("email", email);
             return (Usuario) query.getSingleResult();
         } catch (NoResultException e) {
             return null;

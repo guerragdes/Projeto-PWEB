@@ -71,37 +71,28 @@
             </table>
         </div>
 
-        <!-- Resumo e Seleção de Cliente -->
+        <!-- Resumo e Dados do Comprador -->
         <div class="row g-4">
             <div class="col-12 col-lg-8">
                 <div class="card border-0 shadow-sm p-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px;">
-                    <h5 class="mb-4" style="color: #1a1a1a; font-weight: 600;">Selecione um Cliente para Finalizar</h5>
-                    <form th:action="@{/carrinho/finalizar}" method="post">
-                        <div class="mb-4">
-                            <label for="clienteId" class="form-label" style="color: #1a1a1a; font-weight: 500;">Cliente *</label>
-                            <select id="clienteId" name="clienteId" class="form-select" style="border-radius: 8px; border: 1px solid #e0e0e0; padding: 0.7rem; background-color: white;">
-                                <option value="">-- Selecione um Cliente --</option>
-                                <option th:each="cliente : ${clientes}"
-                                        th:value="${cliente.id}"
-                                        th:text="${cliente.displayName}">
-                                    Cliente
-                                </option>
-                            </select>
-                            <div class="text-danger mt-2" th:if="${erroKey}" th:text="#{${erroKey}}" style="font-weight: 500;"></div>
-                        </div>
-                        <div class="d-flex gap-3 flex-wrap">
-                            <button type="submit" class="btn btn-success btn-lg" style="border-radius: 8px; padding: 0.8rem 2rem; font-weight: 500; transition: all 0.2s ease; flex: 1; min-width: 200px;">
+                    <h5 class="mb-4" style="color: #1a1a1a; font-weight: 600;">Finalizar Compra</h5>
+                    <div class="mb-4" style="background-color: #f0f7ff; border-left: 4px solid #0066cc; border-radius: 6px; padding: 1rem 1.2rem;">
+                        <span style="color: #555; font-size: 14px;">Comprador:</span>
+                        <strong style="color: #1a1a1a; font-size: 16px; margin-left: 0.4rem;" th:text="${nomeUsuario}">Usuário</strong>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <form th:action="@{/carrinho/finalizar}" method="post" style="flex: 1;">
+                            <button type="submit" class="btn btn-success w-100" style="border-radius: 8px; padding: 0.8rem; font-weight: 500; transition: all 0.2s ease;">
                                 ✓ Finalizar Compra
                             </button>
                         </form>
-                            <form th:action="@{/carrinho/limpar}" method="post" style="display: inline; flex: 1; min-width: 200px;">
-                                <button type="submit" class="btn btn-outline-danger w-100" style="border-radius: 8px; padding: 0.8rem 2rem; font-weight: 500; transition: all 0.2s ease;">
-                                    ✕ Limpar Carrinho
-                                </button>
-                            </form>
-                        </div>
-                    </form>
-                </div>       
+                        <form th:action="@{/carrinho/limpar}" method="post" style="flex: 1;">
+                            <button type="submit" class="btn btn-outline-danger w-100" style="border-radius: 8px; padding: 0.8rem; font-weight: 500; transition: all 0.2s ease;">
+                                ✕ Limpar Carrinho
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <!-- Resumo do Total -->

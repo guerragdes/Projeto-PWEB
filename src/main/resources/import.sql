@@ -8,6 +8,11 @@ INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', '
 INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Jotter Produtos Tecnológicos', '60.176.887/0001-03', 'jotter@tecnologicos.com', '(71) 3236-5798');
 INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Oeste Soluções em Tecnologia', '64.540.240/0001-61', 'oeste@tecnologia.com', '(21) 3579-5432');
 
+-- Usuários (Clientes com Login)
+-- Senha do admin: admin | Senha do user: 123
+INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'admin', '$2a$10$UaCicdIjoORu0DZwEh3kleX5oK2LZb5Y9dxQPnCXyw8JFHCXNvJNq', 'Administrador', 'admin@loja.com');
+INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'user', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW', 'Usuário Comum', 'user@email.com');
+
 -- Produtos
 INSERT INTO produto (descricao, valor) VALUES ('Notebook Dell', 3500.00);
 INSERT INTO produto (descricao, valor) VALUES ('Mouse Logitech', 150.00);
@@ -44,13 +49,6 @@ INSERT INTO item (produto_id, quantidade, venda_id) VALUES (1, 3, 5);
 INSERT INTO role (nome) VALUES ('ROLE_ADMIN');
 INSERT INTO role (nome) VALUES ('ROLE_USER');
 
--- Usuários (senhas criptografadas com BCrypt)
--- Senha do admin: admin | Senha do user: 123
-INSERT INTO usuario (login, senha) VALUES ('admin', '$2a$10$uaPTPJQUXQk/KOyaNrQjP.5uXsXbV89BaIlK19R3aBU8gyTBncX3y');
-INSERT INTO usuario (login, senha) VALUES ('user', '$2a$10$z3kW8ZjqBij7M.sgTSjlqOGJOxL55/2nA1uLgViMvWrEblKtV4vVu');
-
--- Associação de Roles aos Usuários (tabela de junção)
--- admin -> ROLE_ADMIN
-INSERT INTO usuario_roles (usuarios_id, roles_id) VALUES (1, 1);
--- user -> ROLE_USER
-INSERT INTO usuario_roles (usuarios_id, roles_id) VALUES (2, 2);
+-- Associação de Roles aos Usuários (cada INSERT deve ficar em UMA ÚNICA LINHA - exigência do parser do Hibernate para import.sql)
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'admin' AND r.nome = 'ROLE_ADMIN';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'user' AND r.nome = 'ROLE_USER';

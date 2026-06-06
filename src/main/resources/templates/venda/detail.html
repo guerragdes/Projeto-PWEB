@@ -32,7 +32,7 @@
                     <div th:if="${venda.cliente}" style="line-height: 1.8;">
                         <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
                             <strong style="white-space: nowrap;">Cliente:</strong>
-                            <span style="word-break: break-word;" th:text="${venda.cliente instanceof T(com.example.projetopweb.model.entity.PessoaFisica) ? venda.cliente.nome : venda.cliente.razaoSocial}"></span>
+                            <span style="word-break: break-word;" th:text="${venda.cliente.displayName}"></span>
                         </div>
                         <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
                             <strong style="white-space: nowrap;">Email:</strong>
