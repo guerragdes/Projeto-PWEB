@@ -1,7 +1,7 @@
 -- Pessoas Físicas (Clientes)
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Luiz Vitório Dias', '417.101.010-16', 'luizvitdg@gmail.com', '(31) 99632-1455');
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Lourenço Sevieri', '297.762.590-90', 'lo.sevieri@email.com', '(63) 99876-5432');
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Felipe Loppeux', '206.249.290-19', 'felipeloppeux@email.com', '(71) 99831-2468');
+INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Luiz Dias Gonçalves', '417.101.010-16', 'luizvitdg@gmail.com', '(31) 99632-1455');
+INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Fernando Sevieri Muniz', '297.762.590-90', 'lo.sevieri@email.com', '(63) 99876-5432');
+INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Felipe Cavalcante Menezes', '206.249.290-19', 'felipeloppeux@email.com', '(71) 99831-2468');
 
 -- Pessoas Jurídicas (Clientes Empresa)
 INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Guerra Game Design', '28.491.746/0001-64', 'gamedesign@guerra.com', '(11) 3319-2236');
