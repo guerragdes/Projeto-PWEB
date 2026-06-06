@@ -50,7 +50,7 @@
                     <tr th:each="venda : ${listaVendas}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
                         <td class="p-3" style="color: #667;">#<span th:text="${venda.id}"></span></td>
                         <td class="p-3" style="color: #667;" th:text="${#temporals.format(venda.getData(), 'dd/MM/yyyy HH:mm')}"></td>
-                        <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${venda.cliente != null ? (venda.cliente instanceof T(com.example.projetopweb.model.entity.PessoaFisica) ? venda.cliente.nome : venda.cliente.razaoSocial) : 'N/A'}"></td>
+                        <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${venda.cliente != null ? venda.cliente.displayName : 'N/A'}"></td>
                         <td class="text-center p-3">
                             <strong style="color: #0066cc; font-size: 16px;" th:text="|R$ ${#numbers.formatDecimal(venda.total(), 1, 2)}|"></strong>
                         </td>
