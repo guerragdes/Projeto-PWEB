@@ -21,10 +21,6 @@ public abstract class Pessoa implements Serializable {
     @Email
     private String email;
 
-    @NotBlank
-    @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$")
-    private String telefone;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
@@ -32,9 +28,8 @@ public abstract class Pessoa implements Serializable {
     public Pessoa() {
     }
 
-    public Pessoa(String email, String telefone) {
+    public Pessoa(String email) {
         this.email = email;
-        this.telefone = telefone;
     }
 
     public Long getId() {
@@ -53,14 +48,6 @@ public abstract class Pessoa implements Serializable {
         this.email = email;
     }
 
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
     public Usuario getUsuario() {
         return usuario;
     }
@@ -74,4 +61,3 @@ public abstract class Pessoa implements Serializable {
         return "";
     }
 }
-

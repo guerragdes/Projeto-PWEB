@@ -3,6 +3,8 @@ package com.example.projetopweb.model.entity;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.br.CNPJ;
 
 @Entity
@@ -16,13 +18,18 @@ public class PessoaJuridica extends Pessoa {
     @CNPJ(message = "{CNPJ.empresa.cnpj}")
     private String cnpj;
 
+    @NotBlank
+    @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$")
+    private String telefone;
+
     public PessoaJuridica() {
     }
 
-    public PessoaJuridica(String email, String telefone, String razaoSocial, String cnpj) {
-        super(email, telefone);
+    public PessoaJuridica(String email, String razaoSocial, String cnpj, String telefone) {
+        super(email);
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
+        this.telefone = telefone;
     }
 
     public String getRazaoSocial() {
@@ -39,6 +46,14 @@ public class PessoaJuridica extends Pessoa {
 
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     @Override
