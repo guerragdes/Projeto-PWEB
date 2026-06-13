@@ -14,14 +14,13 @@ INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'admin', '$
 INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'user', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW', 'Usuário Comum', 'user@email.com');
 
 -- Produtos
-INSERT INTO produto (descricao, valor) VALUES ('Notebook Dell', 3500.00);
-INSERT INTO produto (descricao, valor) VALUES ('Mouse Logitech', 150.00);
-INSERT INTO produto (descricao, valor) VALUES ('Teclado Mecânico', 450.00);
-INSERT INTO produto (descricao, valor) VALUES ('Monitor LG 24"', 800.00);
-INSERT INTO produto (descricao, valor) VALUES ('Webcam HD', 250.00);
-INSERT INTO produto (descricao, valor) VALUES ('Processador AMD Ryzen 9', 2200.00);
-INSERT INTO produto (descricao, valor) VALUES ('Placa de Vídeo RTX 3080', 5000.00);
-INSERT INTO produto (descricao, valor) VALUES ('Memória RAM 32GB', 600.00);
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Notebook Dell', 3500.00, 'notebook-dell.jpg');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Mouse Logitech', 150.00, 'mouse-logitech.png');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Teclado Mecânico', 450.00, 'teclado-mecanico.jpg');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Monitor LG 24"', 800.00, 'monitor-lg.png');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Webcam HD', 250.00, 'webcam-hd.jpg');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Processador AMD Ryzen 9', 2200.00, 'processador-ryzen.jpg');
+INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Placa de Vídeo RTX 3080', 5000.00, 'placa-video-rtx.jpg');
 
 -- Vendas associadas aos clientes
 INSERT INTO venda (data, pessoa_id) VALUES ('2026-03-10 10:30:00', 1);

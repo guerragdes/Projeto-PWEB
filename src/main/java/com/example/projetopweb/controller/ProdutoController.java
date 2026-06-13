@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.projetopweb.model.entity.Produto;
 import com.example.projetopweb.model.repository.ProdutoRepository;
@@ -16,6 +17,11 @@ import com.example.projetopweb.service.CarrinhoService;
 
 import jakarta.validation.Valid;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -27,6 +33,8 @@ public class ProdutoController {
 
     @Autowired
     CarrinhoService carrinhoService;
+
+    private static final String UPLOAD_DIR = "uploads/produtos/";
 
     @GetMapping
     public String listar(
@@ -72,10 +80,40 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public String salvar(@ModelAttribute("produto") @Valid Produto produto, BindingResult result) {
+    public String salvar(
+            @ModelAttribute("produto") @Valid Produto produto,
+            BindingResult result,
+            @RequestParam(value = "imagem", required = false) MultipartFile imagem) {
+
         if (result.hasErrors()) {
             return "produto/form";
         }
+
+        // Processa upload de imagem, se fornecida
+        if (imagem != null && !imagem.isEmpty()) {
+            try {
+                // Garante que o diretório de upload existe
+                Path uploadPath = Paths.get(UPLOAD_DIR);
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                // Gera nome único: timestamp + nome original
+                String nomeOriginal = imagem.getOriginalFilename();
+                String nomeArquivo = System.currentTimeMillis() + "_" + nomeOriginal;
+
+                // Salva o arquivo
+                Path destino = uploadPath.resolve(nomeArquivo);
+                Files.copy(imagem.getInputStream(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                // Grava o nome do arquivo na entidade
+                produto.setImagemUrl(nomeArquivo);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Em caso de erro no upload, salva o produto sem imagem
+            }
+        }
+
         produtoRepository.salvar(produto);
         return "redirect:/produtos"; // faz uma nova requisição http para /produtos, evitando reenvio de formulário
     }

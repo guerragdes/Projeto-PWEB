@@ -6,7 +6,7 @@
 <main>
     <h1>Novo Produto</h1>
 
-    <form th:action="@{/produtos}" th:object="${produto}" method="post" class="form-group">
+    <form th:action="@{/produtos}" th:object="${produto}" method="post" enctype="multipart/form-data" class="form-group">
         <div class="mb-3">
             <label for="descricao" class="form-label">Descrição:</label>
             <input type="text" class="form-control" id="descricao" th:field="*{descricao}">
@@ -25,9 +25,42 @@
             </div>
         </div>
 
+        <div class="mb-3">
+            <label for="imagem" class="form-label">Imagem do Produto:</label>
+            <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+            <div class="form-text text-muted">Formatos aceitos: JPG, PNG, WebP. Tamanho máximo: 5MB.</div>
+
+            <!-- Preview da imagem selecionada -->
+            <div id="imagemPreviewContainer" style="display: none; margin-top: 12px;">
+                <img id="imagemPreview" alt="Preview da imagem"
+                     style="max-width: 250px; max-height: 200px; border-radius: 8px; border: 2px solid #e0e0e0; object-fit: cover;">
+            </div>
+        </div>
+
         <button type="submit" class="btn btn-primary">Salvar Produto</button>
         <a href="/produtos" class="btn btn-secondary">Cancelar</a>
     </form>
+
+    <script>
+        // Preview da imagem antes do upload
+        document.getElementById('imagem').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const container = document.getElementById('imagemPreviewContainer');
+            const preview = document.getElementById('imagemPreview');
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    container.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                container.style.display = 'none';
+                preview.src = '';
+            }
+        });
+    </script>
 </main>
 </body>
 </html>

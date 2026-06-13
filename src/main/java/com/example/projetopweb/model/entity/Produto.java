@@ -1,5 +1,6 @@
 package com.example.projetopweb.model.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,6 +26,9 @@ public class Produto implements Serializable {
     @Positive
     private BigDecimal valor;
 
+    @Nullable
+    private String imagemUrl;
+
     public Long getId() {
         return id;
     }
@@ -47,5 +51,14 @@ public class Produto implements Serializable {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    @Nullable
+    public String getImagemUrl() {
+        return imagemUrl;
+    }
+
+    public void setImagemUrl(@Nullable String imagemUrl) {
+        this.imagemUrl = imagemUrl;
     }
 }
