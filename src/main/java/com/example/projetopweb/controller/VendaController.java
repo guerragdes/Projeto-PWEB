@@ -85,7 +85,7 @@ public class VendaController {
         if (dataInicio != null && !dataInicio.isEmpty() && dataFim != null && !dataFim.isEmpty()) {
             LocalDate inicio = LocalDate.parse(dataInicio);
             LocalDate fim = LocalDate.parse(dataFim);
-            listaVendas = vendaRepository.buscarPorPeriodo(inicio, fim);
+            listaVendas = vendaRepository.buscarPorClienteEPeriodo(cliente.get(), inicio, fim);
             model.addAttribute("dataInicio", dataInicio);
             model.addAttribute("dataFim", dataFim);
         } else {
