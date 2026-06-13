@@ -6,7 +6,7 @@ import jakarta.persistence.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.projetopweb.model.entity.Pessoa;
+import com.example.projetopweb.model.entity.Usuario;
 import com.example.projetopweb.model.entity.Venda;
 
 import java.time.LocalDate;
@@ -55,13 +55,13 @@ public class VendaRepository {
         return query.getResultList();
     }
 
-    public List<Venda> buscarPorCliente(Pessoa cliente) {
+    public List<Venda> buscarPorCliente(Usuario cliente) {
         Query query = em.createQuery("SELECT v FROM Venda v WHERE v.cliente = :cliente ORDER BY v.data DESC");
         query.setParameter("cliente", cliente);
         return query.getResultList();
     }
 
-    public List<Venda> buscarPorClienteEPeriodo(Pessoa cliente, LocalDate dataInicio, LocalDate dataFim) {
+    public List<Venda> buscarPorClienteEPeriodo(Usuario cliente, LocalDate dataInicio, LocalDate dataFim) {
         LocalDateTime inicio = dataInicio.atStartOfDay();
         LocalDateTime fim = dataFim.atTime(LocalTime.MAX);
 

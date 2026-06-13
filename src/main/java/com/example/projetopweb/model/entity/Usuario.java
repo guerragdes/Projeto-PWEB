@@ -6,15 +6,26 @@ import java.util.Collection;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@DiscriminatorValue("U")
-public class Usuario extends Pessoa implements Serializable, UserDetails {
+@Table(name = "tb_pessoa")
+public class Usuario implements Serializable, UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotBlank
+    private String nome; // Armazena Nome ou Razão Social
+
+    @NotBlank
+    @Email
+    private String email;
 
     @NotBlank
     private String login;
@@ -22,29 +33,31 @@ public class Usuario extends Pessoa implements Serializable, UserDetails {
     @NotBlank
     private String senha;
 
-    @NotBlank
-    private String nome;
-
-    @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$")
     private String telefone;
+
+    private String documento; // CPF ou CNPJ
+
+    private String tipoPessoa; // 'F' para Física, 'J' para Jurídica
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "usuario_roles", // Define explicitamente o nome da tabela
-            joinColumns = @JoinColumn(name = "usuario_id"), // ID do Usuário
-            inverseJoinColumns = @JoinColumn(name = "role_id") // ID da Role
+            name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles = new ArrayList<>();
 
     public Usuario() {
     }
 
-    public Usuario(String email, String nome, String telefone, String login, String senha) {
-        super(email);
+    public Usuario(String email, String nome, String telefone, String login, String senha, String documento, String tipoPessoa) {
+        this.email = email;
         this.nome = nome;
         this.telefone = telefone;
         this.login = login;
         this.senha = senha;
+        this.documento = documento;
+        this.tipoPessoa = tipoPessoa;
     }
 
     @Override
@@ -82,9 +95,32 @@ public class Usuario extends Pessoa implements Serializable, UserDetails {
         return true;
     }
 
-    @Override
     public String getDisplayName() {
         return this.nome;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getLogin() {
@@ -103,20 +139,28 @@ public class Usuario extends Pessoa implements Serializable, UserDetails {
         this.senha = senha;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getTelefone() {
         return telefone;
     }
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }
+
+    public String getTipoPessoa() {
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(String tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
     }
 
     public List<Role> getRoles() {

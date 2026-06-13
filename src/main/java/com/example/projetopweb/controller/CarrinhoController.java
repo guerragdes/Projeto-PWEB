@@ -7,11 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.projetopweb.model.entity.Pessoa;
 import com.example.projetopweb.model.entity.Produto;
 import com.example.projetopweb.model.entity.Usuario;
 import com.example.projetopweb.model.entity.Venda;
-import com.example.projetopweb.model.repository.PessoaRepository;
+import com.example.projetopweb.model.repository.UsuarioRepository;
 import com.example.projetopweb.model.repository.ProdutoRepository;
 import com.example.projetopweb.model.repository.VendaRepository;
 import com.example.projetopweb.service.CarrinhoService;
@@ -33,7 +32,7 @@ public class CarrinhoController {
     VendaRepository vendaRepository;
 
     @Autowired
-    PessoaRepository pessoaRepository;
+    UsuarioRepository usuarioRepository;
 
     @GetMapping
     public String visualizar(Model model, @AuthenticationPrincipal Usuario usuario) {
@@ -79,12 +78,12 @@ public class CarrinhoController {
             return "redirect:/carrinho";
         }
 
-        // Busca a entidade Pessoa gerenciada pelo JPA a partir do ID do usuário logado.
+        // Busca a entidade Usuario gerenciada pelo JPA a partir do ID do usuário logado.
         // Isso é necessário porque o objeto "usuario" vindo do Spring Security
         // está desanexado da sessão JPA atual (foi carregado em outra transação,
         // no momento do login). Sem isso, o Hibernate lançaria um erro ao tentar
         // salvar a Venda com uma entidade não-gerenciada.
-        Optional<Pessoa> clienteOpt = pessoaRepository.buscarPorId(usuario.getId());
+        Optional<Usuario> clienteOpt = usuarioRepository.buscarPorId(usuario.getId());
 
         if (clienteOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("erroKey", "NotFound.venda.cliente");

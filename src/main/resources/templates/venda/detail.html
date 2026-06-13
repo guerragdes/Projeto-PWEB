@@ -34,6 +34,10 @@
                             <strong style="white-space: nowrap;">Cliente:</strong>
                             <span style="word-break: break-word;" th:text="${venda.cliente.displayName}"></span>
                         </div>
+                        <div th:if="${venda.cliente.documento != null}" style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
+                            <strong style="white-space: nowrap;">Documento:</strong>
+                            <span style="word-break: break-word;" th:text="${venda.cliente.documento}"></span>
+                        </div>
                         <div style="display: grid; grid-template-columns: auto 1fr; gap: 1rem; margin-bottom: 10px; align-items: start;">
                             <strong style="white-space: nowrap;">Email:</strong>
                             <span style="word-break: break-word;" th:text="${venda.cliente.email}"></span>

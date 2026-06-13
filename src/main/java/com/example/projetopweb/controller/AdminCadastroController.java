@@ -15,8 +15,8 @@ import com.example.projetopweb.model.repository.RoleRepository;
 import com.example.projetopweb.model.repository.UsuarioRepository;
 
 @Controller
-@RequestMapping("/cadastro")
-public class CadastroController {
+@RequestMapping("/admin/cadastrar")
+public class AdminCadastroController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -29,7 +29,7 @@ public class CadastroController {
 
     @GetMapping
     public String exibirFormulario() {
-        return "login/cadastro";
+        return "admin/form";
     }
 
     @PostMapping
@@ -38,43 +38,37 @@ public class CadastroController {
             @RequestParam String nome,
             @RequestParam String email,
             @RequestParam String senha,
-            @RequestParam(required = false) String telefone,
             @RequestParam String confirmaSenha,
-            @RequestParam String tipoPessoa,
-            @RequestParam String documento,
             Model model) {
 
         if (!senha.equals(confirmaSenha)) {
             model.addAttribute("erro", "As senhas não coincidem.");
-            return "login/cadastro";
+            return "admin/form";
         }
 
         if (usuarioRepository.usuario(login) != null) {
-            model.addAttribute("erro", "Este login já está em uso. Escolha outro.");
-            return "login/cadastro";
+            model.addAttribute("erro", "Este login já está em uso.");
+            return "admin/form";
         }
 
         if (usuarioRepository.usuarioPorEmail(email) != null) {
-            model.addAttribute("erro", "Este email já está cadastrado. Escolha outro.");
-            return "login/cadastro";
+            model.addAttribute("erro", "Este email já está cadastrado.");
+            return "admin/form";
         }
 
-        Usuario novoUsuario = new Usuario();
-        novoUsuario.setLogin(login);
-        novoUsuario.setNome(nome);
-        novoUsuario.setEmail(email);
-        novoUsuario.setTelefone(telefone);
-        novoUsuario.setSenha(passwordEncoder.encode(senha));
-        novoUsuario.setTipoPessoa(tipoPessoa);
-        novoUsuario.setDocumento(documento);
-
-        Role roleUser = roleRepository.buscarPorNome("ROLE_USER");
-        if (roleUser != null) {
-            novoUsuario.getRoles().add(roleUser);
+        Usuario novoAdmin = new Usuario();
+        novoAdmin.setLogin(login);
+        novoAdmin.setNome(nome);
+        novoAdmin.setEmail(email);
+        novoAdmin.setSenha(passwordEncoder.encode(senha));
+        
+        Role roleAdmin = roleRepository.buscarPorNome("ROLE_ADMIN");
+        if (roleAdmin != null) {
+            novoAdmin.getRoles().add(roleAdmin);
         }
 
-        usuarioRepository.salvar(novoUsuario);
+        usuarioRepository.salvar(novoAdmin);
 
-        return "redirect:/login?cadastrado";
+        return "redirect:/clientes?adminCadastrado=true";
     }
 }

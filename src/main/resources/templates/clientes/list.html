@@ -6,7 +6,13 @@
 <main>
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <h1 class="mb-0">👥 Clientes</h1>
-        <a href="/clientes/novo" class="btn btn-primary" sec:authorize="hasAnyRole('ADMIN')" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">+ Novo Cliente</a>
+    </div>
+
+    <!-- Mensagem de sucesso após cadastro de admin -->
+    <div th:if="${param.adminCadastrado}">
+        <div class="alert alert-success" role="alert">
+            <strong>✅ Administrador cadastrado com sucesso!</strong>
+        </div>
     </div>
 
     <div class="filter-form p-4 mb-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
@@ -27,7 +33,7 @@
     </div>
 
     <div th:if="${listaClientes.isEmpty()}" class="empty-message text-center py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; border: 2px dashed #e0e0e0;">
-        <p style="font-size: 18px; color: #667; margin: 0;">Nenhum cliente cadastrado.</p>
+        <p style="font-size: 18px; color: #667; margin: 0;">Nenhum cliente encontrado.</p>
     </div>
 
     <div class="table-responsive" th:unless="${listaClientes.isEmpty()}">
@@ -36,7 +42,7 @@
                 <tr>
                     <th class="p-3" style="color: #1a1a1a; font-weight: 600;">ID</th>
                     <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Nome</th>
-                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">CPF</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Documento</th>
                     <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Email</th>
                     <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Telefone</th>
                     <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Ações</th>
@@ -46,7 +52,11 @@
                 <tr th:each="cliente : ${listaClientes}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
                     <td class="p-3" style="color: #667;">#<span th:text="${cliente.id}"></span></td>
                     <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${cliente.nome}"></td>
-                    <td class="p-3" style="color: #667;" th:text="${cliente.cpf}"></td>
+                    <td class="p-3" style="color: #667;">
+                        <span th:if="${cliente.tipoPessoa == 'F'}" class="badge bg-secondary">PF</span>
+                        <span th:if="${cliente.tipoPessoa == 'J'}" class="badge bg-dark">PJ</span>
+                        <span th:text="${cliente.documento}"></span>
+                    </td>
                     <td class="p-3" style="color: #667;" th:text="${cliente.email}"></td>
                     <td class="p-3" style="color: #667;" th:text="${cliente.telefone}"></td>
                     <td class="text-center p-3">
@@ -101,11 +111,6 @@
             }
         }
     </style>
-</main>
-</body>
-</html>
-        </tbody>
-    </table>
 </main>
 </body>
 </html>

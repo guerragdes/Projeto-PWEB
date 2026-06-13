@@ -8,10 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projetopweb.model.entity.Pessoa;
-import com.example.projetopweb.model.entity.PessoaFisica;
+import com.example.projetopweb.model.entity.Usuario;
 import com.example.projetopweb.model.entity.Venda;
-import com.example.projetopweb.model.repository.PessoaRepository;
+import com.example.projetopweb.model.repository.UsuarioRepository;
 import com.example.projetopweb.model.repository.VendaRepository;
 
 import java.time.LocalDate;
@@ -26,7 +25,7 @@ public class VendaController {
     private VendaRepository vendaRepository;
 
     @Autowired
-    private PessoaRepository pessoaRepository;
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping
     public String listar(
@@ -74,7 +73,7 @@ public class VendaController {
             @RequestParam(required = false) String dataFim,
             Model model) {
 
-        Optional<Pessoa> cliente = pessoaRepository.buscarPorId(clienteId);
+        Optional<Usuario> cliente = usuarioRepository.buscarPorId(clienteId);
 
         if (cliente.isEmpty()) {
             return "redirect:/vendas";
@@ -94,46 +93,8 @@ public class VendaController {
 
         model.addAttribute("listaVendas", listaVendas);
         model.addAttribute("cliente", cliente.get());
-
-        String nomeCliente = "";
-        if (cliente.get() instanceof com.example.projetopweb.model.entity.PessoaFisica) {
-            nomeCliente = ((com.example.projetopweb.model.entity.PessoaFisica) cliente.get()).getNome();
-        } else if (cliente.get() instanceof com.example.projetopweb.model.entity.PessoaJuridica) {
-            nomeCliente = ((com.example.projetopweb.model.entity.PessoaJuridica) cliente.get()).getRazaoSocial();
-        }
-        model.addAttribute("nomeCliente", nomeCliente);
+        model.addAttribute("nomeCliente", cliente.get().getNome());
 
         return "venda/vendas-por-cliente";
-    }
-
-    @GetMapping("/empresa/{empresaId}")
-    public String vendasPorEmpresa(
-            @PathVariable Long empresaId,
-            @RequestParam(required = false) String dataInicio,
-            @RequestParam(required = false) String dataFim,
-            Model model) {
-
-        Optional<Pessoa> empresaOpt = pessoaRepository.buscarPorId(empresaId);
-        if (empresaOpt.isEmpty() || !(empresaOpt.get() instanceof com.example.projetopweb.model.entity.PessoaJuridica)) {
-            return "redirect:/vendas";
-        }
-        com.example.projetopweb.model.entity.PessoaJuridica empresa = (com.example.projetopweb.model.entity.PessoaJuridica) empresaOpt.get();
-
-        List<Venda> listaVendas;
-        if (dataInicio != null && !dataInicio.isEmpty() && dataFim != null && !dataFim.isEmpty()) {
-            LocalDate inicio = LocalDate.parse(dataInicio);
-            LocalDate fim = LocalDate.parse(dataFim);
-            // Ideal: buscar vendas por empresa e período
-            listaVendas = vendaRepository.buscarPorClienteEPeriodo(empresa, inicio, fim);
-            model.addAttribute("dataInicio", dataInicio);
-            model.addAttribute("dataFim", dataFim);
-        } else {
-            // Ideal: buscar vendas por empresa
-            listaVendas = vendaRepository.buscarPorCliente(empresa);
-        }
-        model.addAttribute("listaVendas", listaVendas);
-        model.addAttribute("empresa", empresa);
-        model.addAttribute("nomeEmpresa", empresa.getRazaoSocial());
-        return "venda/vendas-por-empresa";
     }
 }

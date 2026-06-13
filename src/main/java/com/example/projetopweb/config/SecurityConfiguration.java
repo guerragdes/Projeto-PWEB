@@ -28,25 +28,20 @@ public class SecurityConfiguration {
                         // ===== ACESSO AO PÚBLICO =====
                         .requestMatchers("/login").permitAll() // Pagina de login
                         .requestMatchers("/cadastro").permitAll() // Pagina de cadastro de novos usuários
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll() // Recursos
-                                                                                                      // estáticos
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll() // Recursos estáticos
                         .requestMatchers("/produtos/loja").permitAll() // Pagina da loja
 
                         // ===== ACESSO RESTRITO (APENAS ADMINS) =====
                         // Paginas de cadastro
-                        .requestMatchers("/clientes/novo").hasAnyRole("ADMIN")
-                        .requestMatchers("/empresa/novo").hasAnyRole("ADMIN")
+                        .requestMatchers("/admin/cadastrar").hasAnyRole("ADMIN")
                         .requestMatchers("/produtos/novo").hasAnyRole("ADMIN")
                         // Endpoints de cadastro
-                        .requestMatchers(HttpMethod.POST, "/clientes").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/empresa").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/produtos").hasAnyRole("ADMIN")
 
                         // ===== ACESSO RESTRITO A AUTENTICADOS =====
                         .requestMatchers(HttpMethod.GET, "/clientes").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/empresa").authenticated()
                         .requestMatchers(HttpMethod.GET, "/produtos").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/vendas").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/vendas/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/carrinho").authenticated()
 
                         // Autenticação para qualquer outra requisição

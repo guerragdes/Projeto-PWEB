@@ -1,17 +1,18 @@
 -- Pessoas Físicas (Clientes)
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Luiz Dias Gonçalves', '417.101.010-16', 'luizdg@gmail.com', '(31) 99632-1455');
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Fernando Sevieri Muniz', '297.762.590-90', 'fsevieri@email.com', '(63) 99876-5432');
-INSERT INTO tb_pessoa (tipo, nome, cpf, email, telefone) VALUES ('F', 'Felipe Cavalcante Menezes', '206.249.290-19', 'felipecm@email.com', '(71) 99831-2468');
+-- Senha: 123
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Luiz Victor Gonçalves', '417.101.010-16', 'F', 'lvdg@gmail.com', '(31) 99632-1455', 'lvdg', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Lorenzo Sevieri', '297.762.590-90', 'F', 'lsevieri@email.com', '(63) 99876-5432', 'lsevieri', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Felipe Cavalcante', '206.249.290-19', 'F', 'felipelc@email.com', '(71) 99831-2468', 'felipelc', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
 
 -- Pessoas Jurídicas (Clientes Empresa)
-INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Guerra Game Design', '28.491.746/0001-64', 'gamedesign@guerra.com', '(11) 3319-2236');
-INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Jotter Produtos Tecnológicos', '60.176.887/0001-03', 'jotter@tecnologicos.com', '(71) 3236-5798');
-INSERT INTO tb_pessoa (tipo, razao_social, cnpj, email, telefone) VALUES ('J', 'Oeste Soluções em Tecnologia', '64.540.240/0001-61', 'oeste@tecnologia.com', '(21) 3579-5432');
+-- Senha: 123
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Guerra Game Design', '28.491.746/0001-64', 'J', 'gamedesign@guerra.com', '(11) 3319-2236', 'guerra', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Jotter Produtos Tecnológicos', '60.176.887/0001-03', 'J', 'jotter@tecnologicos.com', '(71) 3236-5798', 'jotter', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
+INSERT INTO tb_pessoa (nome, documento, tipo_pessoa, email, telefone, login, senha) VALUES ('Oeste Soluções em Tecnologia', '64.540.240/0001-61', 'J', 'oeste@tecnologia.com', '(21) 3579-5432', 'oeste', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW');
 
--- Usuários (Clientes com Login)
--- Senha do admin: admin | Senha do user: 123
-INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'admin', '$2a$10$UaCicdIjoORu0DZwEh3kleX5oK2LZb5Y9dxQPnCXyw8JFHCXNvJNq', 'Administrador', 'admin@loja.com');
-INSERT INTO tb_pessoa (tipo, login, senha, nome, email) VALUES ('U', 'user', '$2a$10$lDqnpLLDVAqjJHhp21mHXOZV8naFc5Bx4XAR0zIhHlVVCCWDp8lTW', 'Usuário Comum', 'user@email.com');
+-- Admin
+-- Senha do admin: admin
+INSERT INTO tb_pessoa (login, senha, nome, email) VALUES ('admin', '$2a$10$UaCicdIjoORu0DZwEh3kleX5oK2LZb5Y9dxQPnCXyw8JFHCXNvJNq', 'Administrador', 'admin@loja.com');
 
 -- Produtos
 INSERT INTO produto (descricao, valor, imagem_url) VALUES ('Notebook Dell', 3500.00, 'notebook-dell.jpg');
@@ -48,6 +49,11 @@ INSERT INTO item (produto_id, quantidade, venda_id) VALUES (1, 3, 5);
 INSERT INTO role (nome) VALUES ('ROLE_ADMIN');
 INSERT INTO role (nome) VALUES ('ROLE_USER');
 
--- Associação de Roles aos Usuários (cada INSERT deve ficar em UMA ÚNICA LINHA - exigência do parser do Hibernate para import.sql)
+-- Associação de Roles aos Usuários (cada INSERT deve ficar em UMA ÚNICA LINHA)
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'admin' AND r.nome = 'ROLE_ADMIN';
-INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'user' AND r.nome = 'ROLE_USER';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'lvdg' AND r.nome = 'ROLE_USER';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'guerra' AND r.nome = 'ROLE_ADMIN';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'lsevieri' AND r.nome = 'ROLE_USER';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'felipelc' AND r.nome = 'ROLE_USER';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'jotter' AND r.nome = 'ROLE_USER';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'oeste' AND r.nome = 'ROLE_USER';

@@ -4,67 +4,70 @@
 
 <body>
 <main>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>Compras de <span th:text="${nomeCliente}"></span></h1>
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h1 class="mb-1">🛍️ Compras do Cliente</h1>
+            <h4 class="text-muted" th:text="${nomeCliente}">Nome do Cliente</h4>
+        </div>
+        <a href="/clientes" class="btn btn-outline-secondary" style="border-radius: 8px; padding: 0.7rem 1.5rem; font-weight: 500;">← Voltar para Clientes</a>
     </div>
 
-    <!-- Formulário de Filtro por Data -->
-    <div class="filter-form" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 5px;">
-        <h5>Filtrar por Período</h5>
-        <form method="get" th:action="@{/vendas/cliente/{id}(id=${cliente.id})}" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-
-            <div style="flex: 1; min-width: 200px;">
-                <label for="dataInicio">Data Início:</label>
-                <input type="date" id="dataInicio" name="dataInicio" th:value="${dataInicio}" style="width: 100%; padding: 5px;">
+    <!-- Filtro -->
+    <div class="filter-form p-4 mb-4" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+        <h5 class="mb-3" style="color: #1a1a1a; font-weight: 600;">Filtrar por Período</h5>
+        <form method="get" th:action="@{/vendas/cliente/{id}(id=${cliente.id})}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="dataInicio" class="form-label fw-500">Data Inicial:</label>
+                <input type="date" id="dataInicio" name="dataInicio" th:value="${dataInicio}" class="form-control" style="border-radius: 8px;">
             </div>
-
-            <div style="flex: 1; min-width: 200px;">
-                <label for="dataFim">Data Fim:</label>
-                <input type="date" id="dataFim" name="dataFim" th:value="${dataFim}" style="width: 100%; padding: 5px;">
+            <div class="col-md-4">
+                <label for="dataFim" class="form-label fw-500">Data Final:</label>
+                <input type="date" id="dataFim" name="dataFim" th:value="${dataFim}" class="form-control" style="border-radius: 8px;">
             </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button type="submit" class="btn btn-primary">Filtrar</button>
-                <a th:href="@{/vendas/cliente/{id}(id=${cliente.id})}" class="btn btn-secondary">Limpar Filtros</a>
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary flex-grow-1" style="border-radius: 8px; font-weight: 500;">🔍 Filtrar</button>
+                <a th:href="@{/vendas/cliente/{id}(id=${cliente.id})}" class="btn btn-outline-secondary" style="border-radius: 8px; font-weight: 500;">↻ Limpar</a>
             </div>
         </form>
     </div>
 
-    <div th:if="${listaVendas.isEmpty()}" class="empty-message" style="text-align: center; padding: 60px; background-color: #f9f9f9; border-radius: 8px;">
-        <p style="font-size: 18px; color: #999;">Nenhuma compra encontrada para este cliente.</p>
+    <div th:if="${listaVendas.isEmpty()}" class="empty-message text-center py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #fff 100%); border-radius: 12px; border: 2px dashed #e0e0e0;">
+        <p style="font-size: 18px; color: #667; margin: 0;">Nenhuma compra encontrada para este cliente no período selecionado.</p>
     </div>
 
     <div class="table-responsive" th:unless="${listaVendas.isEmpty()}">
-        <table class="table table-hover table-striped">
-            <thead class="table-light">
-            <tr>
-                <th>ID</th>
-                <th>Data</th>
-                <th class="text-center">Quantidade de Itens</th>
-                <th class="text-right">Total</th>
-                <th class="text-center">Ação</th>
-            </tr>
+        <table class="table" style="border-collapse: collapse;">
+            <thead style="background-color: #f5f7fa; border-bottom: 2px solid #e0e0e0;">
+                <tr>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">ID da Venda</th>
+                    <th class="p-3" style="color: #1a1a1a; font-weight: 600;">Data e Hora</th>
+                    <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Total da Compra</th>
+                    <th class="text-center p-3" style="color: #1a1a1a; font-weight: 600;">Ações</th>
+                </tr>
             </thead>
-
             <tbody>
-            <tr th:each="venda : ${listaVendas}">
-                <td th:text="${venda.id}"></td>
-                <td th:text="${#temporals.format(venda.getData(), 'dd/MM/yyyy HH:mm')}"></td>
-                <td class="text-center" th:text="${venda.itens.size()}"></td>
-                <td class="text-right" th:text="|R$ ${#numbers.formatDecimal(venda.total(), 1, 2)}|" style="font-weight: bold; color: #28a745;"></td>
-                <td class="text-center">
-                    <a th:href="@{/vendas/{id}(id=${venda.id})}" class="btn btn-sm btn-outline-primary">Detalhes</a>
-                </td>
-            </tr>
+                <tr th:each="venda : ${listaVendas}" style="border-bottom: 1px solid #e0e0e0; transition: background-color 0.2s ease;">
+                    <td class="p-3" style="color: #667;">#<span th:text="${venda.id}"></span></td>
+                    <td class="p-3" style="color: #1a1a1a; font-weight: 500;" th:text="${#temporals.format(venda.data, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td class="text-center p-3">
+                        <strong style="color: #10b981; font-size: 16px;" th:text="|R$ ${#numbers.formatDecimal(venda.total(), 1, 2)}|"></strong>
+                    </td>
+                    <td class="text-center p-3">
+                        <a th:href="@{/vendas/{id}(id=${venda.id})}" class="btn btn-sm btn-outline-primary" style="border-radius: 6px; padding: 0.4rem 0.8rem; font-weight: 500; text-decoration: none;">📄 Ver Recibo</a>
+                    </td>
+                </tr>
             </tbody>
-
         </table>
     </div>
 
-    <div style="margin-top: 30px; display: flex; gap: 10px;">
-        <a href="/clientes" class="btn btn-outline-secondary">← Voltar para Clientes</a>
-        <a href="/vendas" class="btn btn-outline-info">Ver Todas as Compras</a>
-    </div>
+    <style>
+        body { background-color: #fafbfc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+        .btn-primary { background-color: #0066cc !important; border-color: #0066cc !important; }
+        .btn-primary:hover { background-color: #0052a3 !important; border-color: #0052a3 !important; transform: translateY(-2px); }
+        .form-control { transition: all 0.2s ease; }
+        .form-control:focus { border-color: #0066cc !important; box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important; }
+        tbody tr:hover { background-color: #f5f7fa !important; }
+    </style>
 </main>
 </body>
 </html>

@@ -21,7 +21,7 @@ public class Venda implements Serializable {
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     @NotNull
-    private Pessoa cliente;
+    private Usuario cliente;
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Item> itens = new ArrayList<>();
@@ -50,11 +50,11 @@ public class Venda implements Serializable {
         this.itens = itens;
     }
 
-    public Pessoa getCliente() {
+    public Usuario getCliente() {
         return cliente;
     }
 
-    public void setCliente(Pessoa cliente) {
+    public void setCliente(Usuario cliente) {
         this.cliente = cliente;
     }
 

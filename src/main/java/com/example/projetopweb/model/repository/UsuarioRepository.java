@@ -9,6 +9,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 @Transactional
 public class UsuarioRepository {
@@ -16,7 +19,7 @@ public class UsuarioRepository {
     @PersistenceContext
     private EntityManager em;
     
-    // Método para buscar um usuário pelo login
+    // Método para buscar um usuário pelo login (inclui roles)
     public Usuario usuario(String login) {
         try {
             Query query = em.createQuery("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.login = :login");
@@ -45,5 +48,25 @@ public class UsuarioRepository {
         } else {
             em.merge(usuario);
         }
+    }
+
+    public List<Usuario> buscarTodos() {
+        Query query = em.createQuery("SELECT u FROM Usuario u ORDER BY u.nome");
+        return query.getResultList();
+    }
+
+    public List<Usuario> buscarClientesPorNome(String nome) {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.documento IS NOT NULL AND LOWER(u.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY u.nome");
+        query.setParameter("nome", nome);
+        return query.getResultList();
+    }
+
+    public List<Usuario> buscarTodosClientes() {
+        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.documento IS NOT NULL ORDER BY u.nome");
+        return query.getResultList();
+    }
+
+    public Optional<Usuario> buscarPorId(Long id) {
+        return Optional.ofNullable(em.find(Usuario.class, id));
     }
 }
