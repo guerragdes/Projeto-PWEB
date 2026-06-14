@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: layout(~{fragments/head :: head(~{})},~{::main})}"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<main>
+    <div style="max-width: 900px; margin: 2rem auto; padding: 0 1rem;">
+
+        <!-- Cabeçalho -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+            <h1 style="margin: 0; font-size: 1.8rem; font-weight: 700; color: #1a1a1a;">Meus Endereços</h1>
+            <a href="/enderecos/novo"
+               style="display: inline-block; padding: 0.7rem 1.4rem; background: #0066cc; color: white; font-weight: 600; font-size: 0.95rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: background 0.2s;"
+               onmouseover="this.style.background='#0052a3'" onmouseout="this.style.background='#0066cc'">
+                + Adicionar Novo Endereço
+            </a>
+        </div>
+
+        <!-- Aviso de lista vazia -->
+        <div th:if="${enderecos.isEmpty()}"
+             style="background: #e8f4fd; border: 1px solid #b3d7f5; border-radius: 10px; padding: 1.5rem 2rem; color: #2c6fad; font-size: 1rem;">
+            Você ainda não possui endereços cadastrados. Clique em <strong>+ Adicionar Novo Endereço</strong> para começar.
+        </div>
+
+        <!-- Grade de endereços -->
+        <div th:unless="${enderecos.isEmpty()}"
+             style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+
+            <div th:each="endereco : ${enderecos}"
+                 style="background: #fff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; border: 1.5px solid #eee;">
+
+                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.05rem; font-weight: 700; color: #1a1a1a;"
+                    th:text="${endereco.logradouro + ', ' + endereco.numero}">Logradouro, Número</h3>
+
+                <p style="margin: 0; color: #555; font-size: 0.9rem;"
+                   th:if="${endereco.complemento != null and !endereco.complemento.isEmpty()}"
+                   th:text="${endereco.complemento}">Complemento</p>
+
+                <p style="margin: 0; color: #0066cc; font-size: 0.9rem;"
+                   th:text="${endereco.bairro + ' - ' + endereco.cidade + '/' + endereco.estado}">Bairro - Cidade/UF</p>
+
+                <p style="margin: 0; font-size: 0.875rem; color: #666;">
+                    <strong>CEP:</strong> <span th:text="${endereco.cep}"></span>
+                </p>
+
+                <!-- Separador e botão -->
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f0f0f0;">
+                    <form th:action="@{/enderecos/remover/{id}(id=${endereco.id})}" method="post">
+                        <button type="submit"
+                                onclick="return confirm('Deseja realmente remover este endereço?');"
+                                style="padding: 0.5rem 1.1rem; font-size: 0.875rem; font-weight: 600; color: #e53e3e; background: transparent; border: 1.5px solid #e53e3e; border-radius: 6px; cursor: pointer; transition: all 0.2s;"
+                                onmouseover="this.style.background='#e53e3e'; this.style.color='white';"
+                                onmouseout="this.style.background='transparent'; this.style.color='#e53e3e';">
+                            🗑 Remover
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+</body>
+</html>

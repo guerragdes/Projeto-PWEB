@@ -34,6 +34,19 @@ public class VendaController {
             @RequestParam(required = false) String dataFim,
             Model model) {
 
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+            String username = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+            Usuario loggedUser = usuarioRepository.usuario(username);
+            boolean isAdmin = loggedUser.getRoles().stream().anyMatch(role -> role.getNome().equals("ROLE_ADMIN"));
+            
+            if (!isAdmin) {
+                return "redirect:/vendas/cliente/" + loggedUser.getId();
+            }
+        } else {
+            return "redirect:/login";
+        }
+
         List<Venda> listaVendas;
 
         if (dataInicio != null && !dataInicio.isEmpty() && dataFim != null && !dataFim.isEmpty()) {
@@ -59,11 +72,24 @@ public class VendaController {
         Optional<Venda> venda = vendaRepository.findById(id);
 
         if (venda.isPresent()) {
+            Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+                String username = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+                Usuario loggedUser = usuarioRepository.usuario(username);
+                boolean isAdmin = loggedUser.getRoles().stream().anyMatch(role -> role.getNome().equals("ROLE_ADMIN"));
+                
+                if (!isAdmin && !loggedUser.getId().equals(venda.get().getCliente().getId())) {
+                    return "redirect:/produtos/loja";
+                }
+            } else {
+                return "redirect:/login";
+            }
+
             model.addAttribute("venda", venda.get());
             return "venda/detail";
         }
 
-        return "redirect:/vendas";
+        return "redirect:/produtos/loja";
     }
 
     @GetMapping("/cliente/{clienteId}")
@@ -73,10 +99,23 @@ public class VendaController {
             @RequestParam(required = false) String dataFim,
             Model model) {
 
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+            String username = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+            Usuario loggedUser = usuarioRepository.usuario(username);
+            boolean isAdmin = loggedUser.getRoles().stream().anyMatch(role -> role.getNome().equals("ROLE_ADMIN"));
+            
+            if (!isAdmin && !loggedUser.getId().equals(clienteId)) {
+                return "redirect:/produtos/loja";
+            }
+        } else {
+            return "redirect:/login";
+        }
+
         Optional<Usuario> cliente = usuarioRepository.buscarPorId(clienteId);
 
         if (cliente.isEmpty()) {
-            return "redirect:/vendas";
+            return "redirect:/produtos/loja";
         }
 
         List<Venda> listaVendas;

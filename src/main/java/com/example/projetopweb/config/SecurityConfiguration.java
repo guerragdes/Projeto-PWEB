@@ -37,12 +37,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/produtos/novo").hasAnyRole("ADMIN")
                         // Endpoints de cadastro
                         .requestMatchers(HttpMethod.POST, "/produtos").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/clientes").hasAnyRole("ADMIN")
 
                         // ===== ACESSO RESTRITO A AUTENTICADOS =====
-                        .requestMatchers(HttpMethod.GET, "/clientes").authenticated()
                         .requestMatchers(HttpMethod.GET, "/produtos").authenticated()
                         .requestMatchers(HttpMethod.GET, "/vendas/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/carrinho").authenticated()
+                        .requestMatchers("/enderecos/**").authenticated()
 
                         // Autenticação para qualquer outra requisição
                         .anyRequest()

@@ -21,6 +21,18 @@
                             <strong>Data:</strong>
                             <span th:text="${#temporals.format(venda.data, 'dd/MM/yyyy HH:mm')}"></span>
                         </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <strong>Forma de Pagamento:</strong>
+                            <span th:text="${venda.formaPagamento == null ? 'Não informada' :
+                                           venda.formaPagamento == 'PIX' ? 'Pix' :
+                                           venda.formaPagamento == 'CARTAO_CREDITO' ? 'Cartão de Crédito' :
+                                           venda.formaPagamento == 'BOLETO' ? 'Boleto Bancário' :
+                                           venda.formaPagamento}"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <strong>Endereço de Entrega:</strong>
+                            <span th:text="${venda.endereco != null ? venda.endereco.getDescricaoCompleta() : 'Não informado'}"></span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -38,7 +38,13 @@ public class CarrinhoController {
     public String visualizar(Model model, @AuthenticationPrincipal Usuario usuario) {
         model.addAttribute("itens", carrinhoService.obterItens());
         model.addAttribute("total", carrinhoService.calcularTotal());
-        model.addAttribute("nomeUsuario", usuario.getDisplayName());
+        
+        Optional<Usuario> clienteOpt = usuarioRepository.buscarPorId(usuario.getId());
+        if (clienteOpt.isPresent()) {
+            model.addAttribute("nomeUsuario", clienteOpt.get().getDisplayName());
+            model.addAttribute("enderecos", clienteOpt.get().getEnderecos());
+        }
+        
         return "carrinho/view";
     }
 
@@ -70,6 +76,8 @@ public class CarrinhoController {
 
     @PostMapping("/finalizar")
     public String finalizarCompra(
+            @RequestParam(required = false) String formaPagamento,
+            @RequestParam(required = false) Long enderecoId,
             @AuthenticationPrincipal Usuario usuario,
             RedirectAttributes redirectAttributes) {
         
@@ -78,11 +86,19 @@ public class CarrinhoController {
             return "redirect:/carrinho";
         }
 
+        // Verifica se a forma de pagamento foi selecionada
+        if (formaPagamento == null || formaPagamento.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("erroKey", "Selecione uma forma de pagamento.");
+            return "redirect:/carrinho";
+        }
+
+        // Verifica se o endereço foi selecionado
+        if (enderecoId == null) {
+            redirectAttributes.addFlashAttribute("erroKey", "Selecione um endereço de entrega.");
+            return "redirect:/carrinho";
+        }
+
         // Busca a entidade Usuario gerenciada pelo JPA a partir do ID do usuário logado.
-        // Isso é necessário porque o objeto "usuario" vindo do Spring Security
-        // está desanexado da sessão JPA atual (foi carregado em outra transação,
-        // no momento do login). Sem isso, o Hibernate lançaria um erro ao tentar
-        // salvar a Venda com uma entidade não-gerenciada.
         Optional<Usuario> clienteOpt = usuarioRepository.buscarPorId(usuario.getId());
 
         if (clienteOpt.isEmpty()) {
@@ -90,10 +106,25 @@ public class CarrinhoController {
             return "redirect:/carrinho";
         }
 
+        Usuario cliente = clienteOpt.get();
+        
+        // Encontra o endereço na lista do cliente
+        com.example.projetopweb.model.entity.Endereco enderecoSelecionado = cliente.getEnderecos().stream()
+                .filter(e -> e.getId().equals(enderecoId))
+                .findFirst()
+                .orElse(null);
+
+        if (enderecoSelecionado == null) {
+            redirectAttributes.addFlashAttribute("erroKey", "Endereço inválido.");
+            return "redirect:/carrinho";
+        }
+
         // Cria a venda e associa os itens do carrinho
         Venda venda = new Venda();
         venda.setData(LocalDateTime.now());
-        venda.setCliente(clienteOpt.get());
+        venda.setCliente(cliente);
+        venda.setFormaPagamento(formaPagamento);
+        venda.setEndereco(enderecoSelecionado);
         venda.setItens(carrinhoService.obterItens());
 
         // Garante que cada item da venda tenha a referência correta para a venda

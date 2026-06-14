@@ -11,7 +11,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0" style="gap: 0.5rem;">
                 <!-- Classe principal acessivel para os autenticados -->
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN')">
                     <a class="nav-link" href="/clientes" style="color: white !important; font-weight: 500; transition: all 0.2s ease; padding: 0.75rem 1rem; border-radius: 6px;">
                         👥 Clientes
                     </a>

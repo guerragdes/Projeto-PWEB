@@ -52,7 +52,7 @@ INSERT INTO role (nome) VALUES ('ROLE_USER');
 -- Associação de Roles aos Usuários (cada INSERT deve ficar em UMA ÚNICA LINHA)
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'admin' AND r.nome = 'ROLE_ADMIN';
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'lvdg' AND r.nome = 'ROLE_USER';
-INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'guerra' AND r.nome = 'ROLE_ADMIN';
+INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'guerra' AND r.nome = 'ROLE_USER';
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'lsevieri' AND r.nome = 'ROLE_USER';
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'felipelc' AND r.nome = 'ROLE_USER';
 INSERT INTO usuario_roles (usuario_id, role_id) SELECT p.id, r.id FROM tb_pessoa p, role r WHERE p.login = 'jotter' AND r.nome = 'ROLE_USER';

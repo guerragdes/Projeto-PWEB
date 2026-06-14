@@ -47,6 +47,9 @@ public class Usuario implements Serializable, UserDetails {
     )
     private List<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Endereco> enderecos = new ArrayList<>();
+
     public Usuario() {
     }
 
@@ -169,5 +172,13 @@ public class Usuario implements Serializable, UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
     }
 }
